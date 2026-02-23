@@ -1,0 +1,55 @@
+{% extends 'admin_panel/base.html' %}
+
+{% block title %}Manage Topics - Admin Panel{% endblock %}
+
+{% block page_title %}Manage Topics{% endblock %}
+{% block page_subtitle %}All topics and categories{% endblock %}
+
+{% block content %}
+<!-- Add Topic Button -->
+<div class="mb-6">
+    <a href="/admin/practice/topic/add/" target="_blank" class="inline-flex items-center px-4 py-2 bg-primary text-white rounded-lg hover:bg-blue-800 transition">
+        <i class="fas fa-plus mr-2"></i> Add New Topic
+    </a>
+</div>
+
+<!-- Topics Grid -->
+<div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+    {% for topic in topics %}
+    <div class="bg-white rounded-xl shadow-lg p-6">
+        <div class="flex items-start justify-between">
+            <div class="flex items-center gap-3">
+                <span class="text-4xl">{{ topic.icon }}</span>
+                <div>
+                    <h3 class="text-lg font-bold">{{ topic.name }}</h3>
+                    <p class="text-gray-500 text-sm">{{ topic.description|truncatewords:10 }}</p>
+                </div>
+            </div>
+            <a href="/admin/practice/topic/{{ topic.id }}/change/" target="_blank" class="text-gray-400 hover:text-primary">
+                <i class="fas fa-edit"></i>
+            </a>
+        </div>
+        
+        <div class="mt-4 pt-4 border-t flex justify-between items-center">
+            <span class="text-gray-500">
+                <i class="fas fa-question-circle mr-1"></i>
+                {{ topic.question_count }} questions
+            </span>
+            <a href="{% url 'topic_questions' topic.slug %}" target="_blank" class="text-blue-500 hover:text-blue-700 text-sm">
+                View Questions <i class="fas fa-external-link-alt ml-1"></i>
+            </a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+{% if not topics %}
+<div class="bg-white rounded-xl shadow-lg p-12 text-center">
+    <i class="fas fa-folder text-gray-300 text-5xl mb-4"></i>
+    <p class="text-gray-500">No topics found. Add topics from Django Admin!</p>
+    <a href="/admin/practice/topic/add/" target="_blank" class="inline-block mt-4 bg-primary text-white px-6 py-2 rounded-lg hover:bg-blue-800 transition">
+        Add First Topic
+    </a>
+</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block title %}About - TechlancePrep{% endblock %}
+
+{% block content %}
+<div class="bg-primary text-white py-12">
+    <div class="container mx-auto px-4 text-center">
+        <h1 class="text-4xl font-bold">About TechlancePrep</h1>
+        <p class="text-gray-300 mt-4">Your journey to mastering coding starts here</p>
+    </div>
+</div>
+
+<section class="py-16">
+    <div class="container mx-auto px-4 max-w-4xl">
+        <div class="bg-white rounded-xl shadow-lg p-8">
+            <h2 class="text-2xl font-bold mb-4">Our Mission</h2>
+            <p class="text-gray-600 mb-6">
+                TechlancePrep was created with a simple mission: to make quality coding education accessible to everyone, completely free of cost. We believe that financial constraints should never stop someone from learning and growing in their career.
+            </p>
+            
+            <h2 class="text-2xl font-bold mb-4">What We Offer</h2>
+            <ul class="list-disc list-inside text-gray-600 space-y-2 mb-6">
+                <li>Curated coding questions from various difficulty levels</li>
+                <li>Multiple programming topics including DSA, Python, React, and Django</li>
+                <li>Progress tracking to monitor your improvement</li>
+                <li>Bookmark feature to save questions for later practice</li>
+                <li>Responsive design for learning on any device</li>
+            </ul>
+            
+            <h2 class="text-2xl font-bold mb-4">Who This Is For</h2>
+            <p class="text-gray-600 mb-6">
+                Whether you're a complete beginner just starting your coding journey, a college student preparing for placements, or a professional looking to brush up your skills, TechlancePrep has something for everyone.
+            </p>
+            
+            <h2 class="text-2xl font-bold mb-4">Technology Stack</h2>
+            <p class="text-gray-600">
+                Built with Django, Tailwind CSS, and PostgreSQL. This project itself serves as a learning resource for those interested in full-stack web development with Python.
+            </p>
+        </div>
+    </div>
+</section>
+{% endblock %}

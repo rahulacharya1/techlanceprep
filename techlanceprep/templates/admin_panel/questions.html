@@ -1,0 +1,82 @@
+{% extends 'admin_panel/base.html' %}
+
+{% block title %}Manage Questions - Admin Panel{% endblock %}
+
+{% block page_title %}Manage Questions{% endblock %}
+{% block page_subtitle %}All practice questions{% endblock %}
+
+{% block content %}
+<!-- Add Question Button -->
+<div class="mb-6 flex justify-between items-center">
+    <a href="/admin/practice/question/add/" target="_blank" class="inline-flex items-center px-4 py-2 bg-primary text-white rounded-lg hover:bg-blue-800 transition">
+        <i class="fas fa-plus mr-2"></i> Add New Question
+    </a>
+    <span class="text-gray-500">{{ questions.count }} total questions</span>
+</div>
+
+<!-- Questions Table -->
+<div class="bg-white rounded-xl shadow-lg overflow-hidden">
+    <div class="overflow-x-auto">
+        <table class="w-full">
+            <thead class="bg-gray-100">
+                <tr>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Question</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Topic</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Difficulty</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Created</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+                {% for question in questions %}
+                <tr class="hover:bg-gray-50">
+                    <td class="px-6 py-4">
+                        <div class="text-sm font-medium text-gray-900">{{ question.title }}</div>
+                        <div class="text-sm text-gray-500 truncate max-w-xs">{{ question.description|truncatewords:10 }}</div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="px-2 py-1 bg-gray-100 text-gray-700 rounded text-sm">
+                            {{ question.topic.icon }} {{ question.topic.name }}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="px-2 py-1 rounded text-xs font-medium
+                            {% if question.difficulty == 'Easy' %}bg-green-100 text-green-700
+                            {% elif question.difficulty == 'Medium' %}bg-yellow-100 text-yellow-700
+                            {% else %}bg-red-100 text-red-700{% endif %}">
+                            {{ question.difficulty }}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        {{ question.created_at|date:"M d, Y" }}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                        <div class="flex gap-3">
+                            <a href="{% url 'question_detail' question.topic.slug question.slug %}" target="_blank" class="text-blue-600 hover:text-blue-900" title="View">
+                                <i class="fas fa-eye"></i>
+                            </a>
+                            <a href="/admin/practice/question/{{ question.id }}/change/" target="_blank" class="text-yellow-600 hover:text-yellow-900" title="Edit">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <a href="/admin/practice/question/{{ question.id }}/delete/" target="_blank" class="text-red-600 hover:text-red-900" title="Delete">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    
+    {% if not questions %}
+    <div class="p-12 text-center">
+        <i class="fas fa-question-circle text-gray-300 text-5xl mb-4"></i>
+        <p class="text-gray-500">No questions found. Add questions from Django Admin!</p>
+        <a href="/admin/practice/question/add/" target="_blank" class="inline-block mt-4 bg-primary text-white px-6 py-2 rounded-lg hover:bg-blue-800 transition">
+            Add First Question
+        </a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

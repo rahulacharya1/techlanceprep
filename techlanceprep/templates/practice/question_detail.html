@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ question.title }} - TechlancePrep{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-12">
+    <div class="max-w-4xl mx-auto">
+        <!-- Breadcrumb -->
+        <nav class="text-sm mb-4">
+            <a href="{% url 'home' %}" class="text-gray-600 hover:text-primary">Home</a>
+            <span class="mx-2 text-gray-400">/</span>
+            <a href="{% url 'all_questions' %}" class="text-gray-600 hover:text-primary">Practice</a>
+            <span class="mx-2 text-gray-400">/</span>
+            <a href="{% url 'topic_questions' question.topic.slug %}" class="text-gray-600 hover:text-primary">{{ question.topic.name }}</a>
+        </nav>
+        
+        <!-- Question Header -->
+        <div class="bg-white rounded-xl shadow-lg p-8 mb-6">
+            <div class="flex justify-between items-start mb-4">
+                <h1 class="text-2xl md:text-3xl font-bold">{{ question.title }}</h1>
+                <div class="flex gap-2">
+                    {% if user.is_authenticated %}
+                        <button onclick="toggleBookmark({{ question.id }})" class="p-2 rounded-lg {% if is_bookmarked %}bg-yellow-100 text-yellow-600{% else %}bg-gray-100 text-gray-600 hover:bg-gray-200{% endif %} transition">
+                            <i class="{% if is_bookmarked %}fas{% else %}far{% endif %} fa-bookmark"></i>
+                        </button>
+                        <button onclick="toggleComplete({{ question.id }})" class="p-2 rounded-lg {% if is_completed %}bg-green-100 text-green-600{% else %}bg-gray-100 text-gray-600 hover:bg-gray-200{% endif %} transition">
+                            <i class="{% if is_completed %}fas{% else %}far{% endif %} fa-check-circle"></i>
+                        </button>
+                    {% else %}
+                        <a href="{% url 'login' %}" class="p-2 bg-gray-100 text-gray-600 rounded-lg">
+                            <i class="far fa-bookmark"></i>
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="flex flex-wrap gap-2 mb-4">
+                <span class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full">
+                    {{ question.topic.icon }} {{ question.topic.name }}
+                </span>
+                <span class="px-3 py-1 rounded-full 
+                    {% if question.difficulty == 'Easy' %}bg-green-100 text-green-700
+                    {% elif question.difficulty == 'Medium' %}bg-yellow-100 text-yellow-700
+                    {% else %}bg-red-100 text-red-700{% endif %}">
+                    {{ question.difficulty }}
+                </span>
+            </div>
+        </div>
+        
+        <!-- Question Description -->
+        <div class="bg-white rounded-xl shadow-lg p-8 mb-6">
+            <h2 class="text-xl font-bold mb-4">Problem Description</h2>
+            <div class="prose max-w-none text-gray-700 whitespace-pre-line">
+                {{ question.description }}
+            </div>
+        </div>
+        
+        <!-- Solution Toggle -->
+        <div class="bg-white rounded-xl shadow-lg p-8">
+            <button onclick="toggleSolution()" id="solutionBtn" class="w-full flex justify-between items-center bg-primary text-white px-6 py-3 rounded-lg hover:bg-blue-800 transition">
+                <span class="font-semibold">View Solution</span>
+                <i class="fas fa-chevron-down" id="solutionIcon"></i>
+            </button>
+            
+            <div id="solutionContent" class="hidden mt-6 p-6 bg-gray-50 rounded-lg">
+                <h3 class="text-lg font-bold mb-4">Solution</h3>
+                <pre class="bg-gray-800 text-green-400 p-4 rounded-lg overflow-x-auto"><code>{{ question.solution }}</code></pre>
+            </div>
+        </div>
+        
+        {% if not user.is_authenticated %}
+        <div class="bg-yellow-50 border border-yellow-200 rounded-xl p-6 mt-6 text-center">
+            <p class="text-yellow-800">🔒 Login to bookmark this question and track your progress!</p>
+            <a href="{% url 'login' %}" class="inline-block mt-3 bg-primary text-white px-6 py-2 rounded-lg hover:bg-blue-800 transition">
+                Login Now
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function toggleSolution() {
+    const content = document.getElementById('solutionContent');
+    const icon = document.getElementById('solutionIcon');
+    const btn = document.getElementById('solutionBtn');
+    
+    if (content.classList.contains('hidden')) {
+        content.classList.remove('hidden');
+        icon.classList.remove('fa-chevron-down');
+        icon.classList.add('fa-chevron-up');
+    } else {
+        content.classList.add('hidden');
+        icon.classList.remove('fa-chevron-up');
+        icon.classList.add('fa-chevron-down');
+    }
+}
+
+function toggleBookmark(questionId) {
+    fetch('{% url "toggle_bookmark" %}', {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': '{{ csrf_token }}',
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: 'question_id=' + questionId
+    })
+    .then(response => response.json())
+    .then(data => {
+        location.reload();
+    });
+}
+
+function toggleComplete(questionId) {
+    fetch('{% url "toggle_complete" %}', {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': '{{ csrf_token }}',
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: 'question_id=' + questionId
+    })
+    .then(response => response.json())
+    .then(data => {
+        location.reload();
+    });
+}
+</script>
+{% endblock %}

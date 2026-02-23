@@ -1,0 +1,145 @@
+{% extends 'base.html' %}
+
+{% block title %}Practice Questions - TechlancePrep{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-12">
+    <div class="flex flex-col md:flex-row gap-8">
+        <!-- Sidebar Filters -->
+        <aside class="w-full md:w-64 flex-shrink-0">
+            <div class="bg-white rounded-xl shadow-lg p-6 sticky top-4">
+                <h3 class="font-bold text-lg mb-4">Filters</h3>
+                
+                <!-- Topic Filter -->
+                <div class="mb-6">
+                    <h4 class="font-semibold mb-2">Topic</h4>
+                    <div class="space-y-2">
+                        <a href="{% url 'all_questions' %}" class="block px-3 py-2 rounded {% if not selected_topic %}bg-primary text-white{% else %}hover:bg-gray-100{% endif %}">
+                            All Topics
+                        </a>
+                        {% for topic in topics %}
+                        <a href="{% url 'topic_questions' topic.slug %}" class="block px-3 py-2 rounded {% if selected_topic == topic.slug %}bg-primary text-white{% else %}hover:bg-gray-100{% endif %}">
+                            {{ topic.icon }} {{ topic.name }}
+                        </a>
+                        {% endfor %}
+                    </div>
+                </div>
+                
+                <!-- Difficulty Filter -->
+                <div>
+                    <h4 class="font-semibold mb-2">Difficulty</h4>
+                    <div class="space-y-2">
+                        <a href="{% url 'all_questions' %}{% if selected_topic %}?topic={{ selected_topic }}{% endif %}" class="block px-3 py-2 rounded {% if not selected_difficulty %}bg-primary text-white{% else %}hover:bg-gray-100{% endif %}">
+                            All Levels
+                        </a>
+                        <a href="{% url 'all_questions' %}?difficulty=Easy{% if selected_topic %}&topic={{ selected_topic }}{% endif %}" class="block px-3 py-2 rounded {% if selected_difficulty == 'Easy' %}bg-green-500 text-white{% else %}hover:bg-gray-100{% endif %}">
+                            Easy
+                        </a>
+                        <a href="{% url 'all_questions' %}?difficulty=Medium{% if selected_topic %}&topic={{ selected_topic }}{% endif %}" class="block px-3 py-2 rounded {% if selected_difficulty == 'Medium' %}bg-yellow-500 text-white{% else %}hover:bg-gray-100{% endif %}">
+                            Medium
+                        </a>
+                        <a href="{% url 'all_questions' %}?difficulty=Hard{% if selected_topic %}&topic={{ selected_topic }}{% endif %}" class="block px-3 py-2 rounded {% if selected_difficulty == 'Hard' %}bg-red-500 text-white{% else %}hover:bg-gray-100{% endif %}">
+                            Hard
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </aside>
+        
+        <!-- Questions List -->
+        <div class="flex-1">
+            <div class="flex justify-between items-center mb-6">
+                <h1 class="text-2xl font-bold">
+                    {% if current_topic %}{{ current_topic.name }}{% else %}All Questions{% endif %}
+                </h1>
+                <span class="text-gray-600">{{ questions.count }} questions</span>
+            </div>
+            
+            {% if questions %}
+                <div class="space-y-4">
+                    {% for question in questions %}
+                    <div class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition">
+                        <div class="flex justify-between items-start">
+                            <div class="flex-1">
+                                <h3 class="text-lg font-bold mb-2">
+                                    <a href="{% url 'question_detail' question.topic.slug question.slug %}" class="hover:text-primary">
+                                        {{ question.title }}
+                                    </a>
+                                </h3>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm">
+                                        {{ question.topic.icon }} {{ question.topic.name }}
+                                    </span>
+                                    <span class="px-3 py-1 rounded-full text-sm 
+                                        {% if question.difficulty == 'Easy' %}bg-green-100 text-green-700
+                                        {% elif question.difficulty == 'Medium' %}bg-yellow-100 text-yellow-700
+                                        {% else %}bg-red-100 text-red-700{% endif %}">
+                                        {{ question.difficulty }}
+                                    </span>
+                                </div>
+                            </div>
+                            
+                            <!-- Action Buttons -->
+                            <div class="flex gap-2 ml-4">
+                                {% if user.is_authenticated %}
+                                    <button onclick="toggleBookmark({{ question.id }})" class="p-2 rounded-lg {% if question.id in bookmark_ids %}bg-yellow-100 text-yellow-600{% else %}bg-gray-100 text-gray-600 hover:bg-gray-200{% endif %} transition" title="Bookmark">
+                                        <i class="{% if question.id in bookmark_ids %}fas{% else %}far{% endif %} fa-bookmark"></i>
+                                    </button>
+                                    <button onclick="toggleComplete({{ question.id }})" class="p-2 rounded-lg {% if question.id in completed_ids %}bg-green-100 text-green-600{% else %}bg-gray-100 text-gray-600 hover:bg-gray-200{% endif %} transition" title="Mark Complete">
+                                        <i class="{% if question.id in completed_ids %}fas{% else %}far{% endif %} fa-check-circle"></i>
+                                    </button>
+                                {% else %}
+                                    <a href="{% url 'login' %}" class="p-2 bg-gray-100 text-gray-600 rounded-lg hover:bg-gray-200 transition" title="Login to Bookmark">
+                                        <i class="far fa-bookmark"></i>
+                                    </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="bg-white rounded-xl shadow-lg p-12 text-center">
+                    <div class="text-5xl mb-4">📚</div>
+                    <h3 class="text-xl font-bold text-gray-700">No questions found</h3>
+                    <p class="text-gray-500 mt-2">Try adjusting your filters</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function toggleBookmark(questionId) {
+    fetch('{% url "toggle_bookmark" %}', {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': '{{ csrf_token }}',
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: 'question_id=' + questionId
+    })
+    .then(response => response.json())
+    .then(data => {
+        location.reload();
+    });
+}
+
+function toggleComplete(questionId) {
+    fetch('{% url "toggle_complete" %}', {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': '{{ csrf_token }}',
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: 'question_id=' + questionId
+    })
+    .then(response => response.json())
+    .then(data => {
+        location.reload();
+    });
+}
+</script>
+{% endblock %}

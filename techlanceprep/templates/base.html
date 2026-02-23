@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}TechlancePrep - Master Coding{% endblock %}</title>
+    <meta name="description" content="Free coding practice platform with DSA, Python, React questions and progress tracking.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1e3a8a',
+                        accent: '#10b981',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50 min-h-screen flex flex-col">
+
+    <!-- Navbar -->
+<nav class="bg-primary text-white shadow-lg">
+    <div class="container mx-auto px-4 py-4">
+        <div class="flex justify-between items-center">
+            <a href="{% url 'home' %}" class="text-2xl font-bold flex items-center gap-2">
+                <i class="fas fa-code text-accent"></i>
+                TechlancePrep
+            </a>
+            
+            <div class="hidden md:flex items-center space-x-6">
+                <a href="{% url 'all_questions' %}" class="hover:text-accent transition">Practice</a>
+                
+                {% if user.is_authenticated %}
+                    {% if user.is_admin or user.is_superuser or user.is_staff %}
+                        <a href="{% url 'admin_dashboard' %}" class="bg-yellow-500 text-black px-4 py-2 rounded-lg hover:bg-yellow-600 transition">
+                            <i class="fas fa-shield-alt mr-1"></i> Admin
+                        </a>
+                    {% endif %}
+                    
+                    <a href="{% url 'dashboard' %}" class="hover:text-accent transition">Dashboard</a>
+                    <a href="{% url 'bookmark_list' %}" class="hover:text-accent transition">Bookmarks</a>
+                    <div class="flex items-center gap-3">
+                        <span class="text-gray-300">Hi, {{ user.username }}</span>
+                        <a href="{% url 'profile' %}" class="bg-accent px-4 py-2 rounded-lg hover:bg-green-600 transition">
+                            Profile
+                        </a>
+                        <a href="{% url 'logout' %}" class="text-gray-300 hover:text-white">
+                            <i class="fas fa-sign-out-alt"></i>
+                        </a>
+                    </div>
+                {% else %}
+                    <a href="{% url 'login' %}" class="hover:text-accent transition">Login</a>
+                    <a href="{% url 'register' %}" class="bg-accent px-4 py-2 rounded-lg hover:bg-green-600 transition">
+                        Sign Up
+                    </a>
+                {% endif %}
+            </div>
+            
+            <!-- Mobile Menu Button -->
+            <button class="md:hidden text-2xl" onclick="toggleMobileMenu()">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden mt-4 pb-4">
+            <a href="{% url 'all_questions' %}" class="block py-2 hover:text-accent">Practice</a>
+            {% if user.is_authenticated %}
+                {% if user.is_admin or user.is_superuser or user.is_staff %}
+                    <a href="{% url 'admin_dashboard' %}" class="block py-2 text-yellow-400">Admin Panel</a>
+                {% endif %}
+                <a href="{% url 'dashboard' %}" class="block py-2 hover:text-accent">Dashboard</a>
+                <a href="{% url 'bookmark_list' %}" class="block py-2 hover:text-accent">Bookmarks</a>
+                <a href="{% url 'profile' %}" class="block py-2 hover:text-accent">Profile</a>
+                <a href="{% url 'logout' %}" class="block py-2 text-red-400">Logout</a>
+            {% else %}
+                <a href="{% url 'login' %}" class="block py-2 hover:text-accent">Login</a>
+                <a href="{% url 'register' %}" class="block py-2 text-accent">Sign Up</a>
+            {% endif %}
+        </div>
+    </div>
+</nav>
+    
+    <!-- Messages -->
+    {% if messages %}
+        <div class="container mx-auto px-4 mt-4">
+            {% for message in messages %}
+                <div class="p-4 rounded-lg mb-2 {% if message.tags == 'success' %}bg-green-100 text-green-700{% elif message.tags == 'error' %}bg-red-100 text-red-700{% else %}bg-blue-100 text-blue-700{% endif %}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    
+    <!-- Main Content -->
+    <main class="flex-grow">
+        {% block content %}{% endblock %}
+    </main>
+    
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="container mx-auto px-4">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4 flex items-center gap-2">
+                        <i class="fas fa-code text-accent"></i> TechlancePrep
+                    </h3>
+                    <p class="text-gray-400">Master coding with free practice questions and progress tracking.</p>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-4">Quick Links</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="{% url 'home' %}" class="hover:text-white">Home</a></li>
+                        <li><a href="{% url 'all_questions' %}" class="hover:text-white">Practice</a></li>
+                        <li><a href="{% url 'about' %}" class="hover:text-white">About</a></li>
+                        <li><a href="{% url 'contact' %}" class="hover:text-white">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-4">Topics</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="#" class="hover:text-white">DSA</a></li>
+                        <li><a href="#" class="hover:text-white">Python</a></li>
+                        <li><a href="#" class="hover:text-white">React</a></li>
+                        <li><a href="#" class="hover:text-white">Django</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-4">Connect</h4>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white text-2xl"><i class="fab fa-github"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white text-2xl"><i class="fab fa-linkedin"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white text-2xl"><i class="fab fa-twitter"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2024 TechlancePrep. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+    </script>
+    
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

@@ -1,145 +1,87 @@
 {% extends 'base.html' %}
 
-{% block title %}Practice Questions - TechlancePrep{% endblock %}
+{% block title %}Curriculums | TechlancePrep{% endblock %}
 
 {% block content %}
-<div class="container mx-auto px-4 py-12">
-    <div class="flex flex-col md:flex-row gap-8">
-        <!-- Sidebar Filters -->
-        <aside class="w-full md:w-64 flex-shrink-0">
-            <div class="bg-white rounded-xl shadow-lg p-6 sticky top-4">
-                <h3 class="font-bold text-lg mb-4">Filters</h3>
-                
-                <!-- Topic Filter -->
-                <div class="mb-6">
-                    <h4 class="font-semibold mb-2">Topic</h4>
-                    <div class="space-y-2">
-                        <a href="{% url 'all_questions' %}" class="block px-3 py-2 rounded {% if not selected_topic %}bg-primary text-white{% else %}hover:bg-gray-100{% endif %}">
-                            All Topics
-                        </a>
-                        {% for topic in topics %}
-                        <a href="{% url 'topic_questions' topic.slug %}" class="block px-3 py-2 rounded {% if selected_topic == topic.slug %}bg-primary text-white{% else %}hover:bg-gray-100{% endif %}">
-                            {{ topic.icon }} {{ topic.name }}
-                        </a>
-                        {% endfor %}
-                    </div>
-                </div>
-                
-                <!-- Difficulty Filter -->
-                <div>
-                    <h4 class="font-semibold mb-2">Difficulty</h4>
-                    <div class="space-y-2">
-                        <a href="{% url 'all_questions' %}{% if selected_topic %}?topic={{ selected_topic }}{% endif %}" class="block px-3 py-2 rounded {% if not selected_difficulty %}bg-primary text-white{% else %}hover:bg-gray-100{% endif %}">
-                            All Levels
-                        </a>
-                        <a href="{% url 'all_questions' %}?difficulty=Easy{% if selected_topic %}&topic={{ selected_topic }}{% endif %}" class="block px-3 py-2 rounded {% if selected_difficulty == 'Easy' %}bg-green-500 text-white{% else %}hover:bg-gray-100{% endif %}">
-                            Easy
-                        </a>
-                        <a href="{% url 'all_questions' %}?difficulty=Medium{% if selected_topic %}&topic={{ selected_topic }}{% endif %}" class="block px-3 py-2 rounded {% if selected_difficulty == 'Medium' %}bg-yellow-500 text-white{% else %}hover:bg-gray-100{% endif %}">
-                            Medium
-                        </a>
-                        <a href="{% url 'all_questions' %}?difficulty=Hard{% if selected_topic %}&topic={{ selected_topic }}{% endif %}" class="block px-3 py-2 rounded {% if selected_difficulty == 'Hard' %}bg-red-500 text-white{% else %}hover:bg-gray-100{% endif %}">
-                            Hard
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </aside>
+<div class="min-h-screen bg-[#0B0F1A] pb-24">
+    <div class="relative py-20 overflow-hidden border-b border-white/5">
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-accent/10 via-transparent to-transparent opacity-60"></div>
         
-        <!-- Questions List -->
-        <div class="flex-1">
-            <div class="flex justify-between items-center mb-6">
-                <h1 class="text-2xl font-bold">
-                    {% if current_topic %}{{ current_topic.name }}{% else %}All Questions{% endif %}
-                </h1>
-                <span class="text-gray-600">{{ questions.count }} questions</span>
-            </div>
+        <div class="container mx-auto px-6 relative z-10 text-center">
+            <h1 class="text-5xl md:text-7xl font-black text-white tracking-tighter mb-6">
+                SELECT YOUR <span class="text-accent">PATH</span>
+            </h3>
+            <p class="text-slate-400 max-w-2xl mx-auto text-lg">
+                Structured learning paths designed by industry experts. Pick a domain and start mastering the technical interview.
+            </p>
+        </div>
+    </div>
+
+    <div class="container mx-auto px-6 -mt-10">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             
-            {% if questions %}
-                <div class="space-y-4">
-                    {% for question in questions %}
-                    <div class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition">
-                        <div class="flex justify-between items-start">
-                            <div class="flex-1">
-                                <h3 class="text-lg font-bold mb-2">
-                                    <a href="{% url 'question_detail' question.topic.slug question.slug %}" class="hover:text-primary">
-                                        {{ question.title }}
-                                    </a>
-                                </h3>
-                                <div class="flex flex-wrap gap-2">
-                                    <span class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm">
-                                        {{ question.topic.icon }} {{ question.topic.name }}
-                                    </span>
-                                    <span class="px-3 py-1 rounded-full text-sm 
-                                        {% if question.difficulty == 'Easy' %}bg-green-100 text-green-700
-                                        {% elif question.difficulty == 'Medium' %}bg-yellow-100 text-yellow-700
-                                        {% else %}bg-red-100 text-red-700{% endif %}">
-                                        {{ question.difficulty }}
-                                    </span>
-                                </div>
-                            </div>
-                            
-                            <!-- Action Buttons -->
-                            <div class="flex gap-2 ml-4">
-                                {% if user.is_authenticated %}
-                                    <button onclick="toggleBookmark({{ question.id }})" class="p-2 rounded-lg {% if question.id in bookmark_ids %}bg-yellow-100 text-yellow-600{% else %}bg-gray-100 text-gray-600 hover:bg-gray-200{% endif %} transition" title="Bookmark">
-                                        <i class="{% if question.id in bookmark_ids %}fas{% else %}far{% endif %} fa-bookmark"></i>
-                                    </button>
-                                    <button onclick="toggleComplete({{ question.id }})" class="p-2 rounded-lg {% if question.id in completed_ids %}bg-green-100 text-green-600{% else %}bg-gray-100 text-gray-600 hover:bg-gray-200{% endif %} transition" title="Mark Complete">
-                                        <i class="{% if question.id in completed_ids %}fas{% else %}far{% endif %} fa-check-circle"></i>
-                                    </button>
-                                {% else %}
-                                    <a href="{% url 'login' %}" class="p-2 bg-gray-100 text-gray-600 rounded-lg hover:bg-gray-200 transition" title="Login to Bookmark">
-                                        <i class="far fa-bookmark"></i>
-                                    </a>
-                                {% endif %}
-                            </div>
-                        </div>
+            {% for topic in topics %}
+            <a href="{% url 'topic_questions' topic.slug %}" class="group relative flex flex-col justify-between h-80 rounded-[2.5rem] bg-white/[0.03] border border-white/10 p-8 transition-all duration-500 hover:bg-white/[0.06] hover:border-accent/50 hover:-translate-y-2">
+                
+                <div class="absolute top-8 right-8 text-7xl opacity-[0.03] group-hover:opacity-[0.08] group-hover:scale-110 transition-all duration-500">
+                    {{ topic.icon }}
+                </div>
+
+                <div class="relative z-10">
+                    <div class="w-16 h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-3xl mb-6 group-hover:bg-accent group-hover:border-accent group-hover:text-white transition-all duration-500 shadow-xl">
+                        {{ topic.icon }}
                     </div>
-                    {% endfor %}
+                    <h2 class="text-3xl font-bold text-white mb-2 tracking-tight">{{ topic.name }}</h2>
+                    <p class="text-slate-500 text-sm line-clamp-2">
+                        Comprehensive practice covering {{ topic.questions.count }} essential concepts and interview patterns.
+                    </p>
                 </div>
-            {% else %}
-                <div class="bg-white rounded-xl shadow-lg p-12 text-center">
-                    <div class="text-5xl mb-4">📚</div>
-                    <h3 class="text-xl font-bold text-gray-700">No questions found</h3>
-                    <p class="text-gray-500 mt-2">Try adjusting your filters</p>
+
+                <div class="relative z-10 flex items-center justify-between mt-8">
+                    <div class="flex flex-col">
+                        <span class="text-[10px] font-black text-slate-500 uppercase tracking-widest">Questions</span>
+                        <span class="text-white font-bold">{{ topic.questions.count }} Problems</span>
+                    </div>
+                    
+                    <div class="h-12 w-12 rounded-full border border-white/10 flex items-center justify-center text-white group-hover:bg-white group-hover:text-black transition-all">
+                        <i class="fas fa-arrow-right"></i>
+                    </div>
                 </div>
-            {% endif %}
+
+                <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-2/3 h-px bg-gradient-to-r from-transparent via-accent/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+            </a>
+            {% endfor %}
+
+            <div class="group relative flex flex-col justify-center items-center h-80 rounded-[2.5rem] bg-white/[0.01] border border-dashed border-white/10 p-8">
+                <div class="text-slate-700 text-4xl mb-4 italic">
+                    <i class="fas fa-rocket"></i>
+                </div>
+                <h2 class="text-xl font-bold text-slate-600">System Design</h2>
+                <span class="mt-2 px-3 py-1 rounded-full bg-white/5 text-[10px] font-black text-accent uppercase tracking-tighter border border-accent/20">
+                    Coming Soon
+                </span>
+            </div>
+
         </div>
     </div>
 </div>
-{% endblock %}
 
-{% block extra_js %}
-<script>
-function toggleBookmark(questionId) {
-    fetch('{% url "toggle_bookmark" %}', {
-        method: 'POST',
-        headers: {
-            'X-CSRFToken': '{{ csrf_token }}',
-            'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: 'question_id=' + questionId
-    })
-    .then(response => response.json())
-    .then(data => {
-        location.reload();
-    });
-}
-
-function toggleComplete(questionId) {
-    fetch('{% url "toggle_complete" %}', {
-        method: 'POST',
-        headers: {
-            'X-CSRFToken': '{{ csrf_token }}',
-            'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: 'question_id=' + questionId
-    })
-    .then(response => response.json())
-    .then(data => {
-        location.reload();
-    });
-}
-</script>
+<div class="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 w-[90%] max-w-4xl">
+    <div class="bg-white/5 backdrop-blur-2xl border border-white/10 rounded-3xl p-4 shadow-2xl flex items-center justify-between px-8">
+        <div class="flex items-center gap-8">
+            <div class="flex flex-col">
+                <span class="text-[10px] font-black text-accent uppercase">Global Progress</span>
+                <span class="text-white font-bold text-sm">12% Complete</span>
+            </div>
+            <div class="h-8 w-px bg-white/10 hidden md:block"></div>
+            <div class="hidden md:flex flex-col">
+                <span class="text-[10px] font-black text-slate-500 uppercase">Active Users</span>
+                <span class="text-white font-bold text-sm">1,240 Online</span>
+            </div>
+        </div>
+        <a href="{% url 'all_questions' %}" class="bg-white text-black px-6 py-2 rounded-xl font-bold text-sm hover:bg-accent hover:text-white transition-all">
+            Resume Practice
+        </a>
+    </div>
+</div>
 {% endblock %}

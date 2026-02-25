@@ -63,33 +63,6 @@
     </div>
 </section>
 
-<section class="py-24 bg-slate-50">
-    <div class="container mx-auto px-6">
-        <div class="flex justify-between items-end mb-12">
-            <div>
-                <h2 class="text-3xl font-bold text-slate-900 mb-2">Explore Topics</h2>
-                <p class="text-slate-500">Structured paths for every developer level.</p>
-            </div>
-            <a href="{% url 'all_questions' %}" class="hidden md:block text-accent font-semibold hover:underline">View all paths →</a>
-        </div>
-
-        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {% for topic in topics %}
-            <a href="{% url 'topic_questions' topic.slug %}" class="group bg-white rounded-2xl border border-slate-200 p-8 transition-all hover:shadow-premium hover:border-accent/30">
-                <div class="w-14 h-14 rounded-xl bg-slate-50 flex items-center justify-center text-3xl mb-6 group-hover:bg-accent group-hover:text-white transition-colors duration-300">
-                    {{ topic.icon }}
-                </div>
-                <h3 class="text-xl font-bold text-slate-900 mb-2">{{ topic.name }}</h3>
-                <div class="flex items-center justify-between">
-                    <span class="text-slate-500 text-sm">{{ topic.questions.count }} Modules</span>
-                    <i class="fas fa-arrow-right text-slate-300 group-hover:text-accent group-hover:translate-x-1 transition-all"></i>
-                </div>
-            </a>
-            {% endfor %}
-        </div>
-    </div>
-</section>
-
 <section class="py-24 bg-white border-y border-slate-100">
     <div class="container mx-auto px-6">
         <div class="text-center max-w-3xl mx-auto mb-20">

@@ -6,63 +6,49 @@ from .models import Topic, Question, Bookmark, CompletedQuestion
 
 
 def home(request):
-    topics = Topic.objects.all()
-    total_questions = Question.objects.count()
-    return render(request, 'core/home.html', {
-        'topics': topics,
-        'total_questions': total_questions,
-    })
+    return redirect('all_topics')
 
 
-def all_questions(request):
-    questions = Question.objects.all().order_by('-created_at')
-    topics = Topic.objects.all()
-    
-    # Filters
-    topic_slug = request.GET.get('topic')
-    difficulty = request.GET.get('difficulty')
-    
-    if topic_slug:
-        questions = questions.filter(topic__slug=topic_slug)
-    if difficulty:
-        questions = questions.filter(difficulty=difficulty)
-    
-    # Check bookmarks and completed for logged in user
-    bookmark_ids = []
-    completed_ids = []
-    if request.user.is_authenticated:
-        bookmark_ids = Bookmark.objects.filter(user=request.user).values_list('question_id', flat=True)
-        completed_ids = CompletedQuestion.objects.filter(user=request.user).values_list('question_id', flat=True)
-    
-    return render(request, 'practice/question_list.html', {
-        'questions': questions,
-        'topics': topics,
-        'selected_topic': topic_slug,
-        'selected_difficulty': difficulty,
-        'bookmark_ids': list(bookmark_ids),
-        'completed_ids': list(completed_ids),
+def all_topics(request):
+    all_topics = Topic.objects.all().order_by('name')
+    return render(request, 'practice/all_topics.html', {
+        'all_topics': all_topics,
     })
 
 
 def topic_questions(request, slug):
     topic = get_object_or_404(Topic, slug=slug)
-    questions = topic.questions.all().order_by('-created_at')
-    topics = Topic.objects.all()
     
-    # Check bookmarks and completed for logged in user
+    all_questions = topic.questions.all()
+    
+    coding_questions = all_questions.filter(question_type='coding')
+    technical_questions = all_questions.filter(question_type='technical')
+    hr_questions = all_questions.filter(question_type='hr')
+    
+    def group_by_difficulty(questions):
+        return {
+            'Easy': questions.filter(difficulty='Easy').order_by('title'),
+            'Medium': questions.filter(difficulty='Medium').order_by('title'),
+            'Hard': questions.filter(difficulty='Hard').order_by('title'),
+        }
+    
+    coding = group_by_difficulty(coding_questions)
+    technical = group_by_difficulty(technical_questions)
+    hr = group_by_difficulty(hr_questions)
+    
     bookmark_ids = []
     completed_ids = []
     if request.user.is_authenticated:
-        bookmark_ids = Bookmark.objects.filter(user=request.user).values_list('question_id', flat=True)
-        completed_ids = CompletedQuestion.objects.filter(user=request.user).values_list('question_id', flat=True)
+        bookmark_ids = list(Bookmark.objects.filter(user=request.user).values_list('question_id', flat=True))
+        completed_ids = list(CompletedQuestion.objects.filter(user=request.user).values_list('question_id', flat=True))
     
-    return render(request, 'practice/question_list.html', {
-        'questions': questions,
-        'topics': topics,
-        'selected_topic': slug,
-        'current_topic': topic,
-        'bookmark_ids': list(bookmark_ids),
-        'completed_ids': list(completed_ids),
+    return render(request, 'practice/topic_questions.html', {
+        'topic': topic,
+        'coding': coding,
+        'technical': technical,
+        'hr': hr,
+        'bookmark_ids': bookmark_ids,
+        'completed_ids': completed_ids,
     })
 
 

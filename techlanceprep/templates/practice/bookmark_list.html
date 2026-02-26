@@ -1,50 +1,77 @@
 {% extends 'base.html' %}
 
-{% block title %}Bookmarks - TechlancePrep{% endblock %}
+{% block title %}Saved Challenges - TechlancePrep{% endblock %}
 
 {% block content %}
-<div class="container mx-auto px-4 py-12">
-    <h1 class="text-3xl font-bold mb-8">Your Bookmarks</h1>
-    
-    {% if bookmarks %}
-        <div class="space-y-4">
-            {% for bookmark in bookmarks %}
-            <div class="bg-white rounded-xl shadow-lg p-6">
-                <div class="flex justify-between items-start">
-                    <div class="flex-1">
-                        <h3 class="text-lg font-bold mb-2">
-                            <a href="{% url 'question_detail' bookmark.question.topic.slug bookmark.question.slug %}" class="hover:text-primary">
-                                {{ bookmark.question.title }}
+<div class="min-h-screen bg-[#0B0F1A] pb-24 relative overflow-hidden">
+    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-accent/5 via-transparent to-transparent opacity-60 pointer-events-none"></div>
+
+    <div class="container mx-auto px-6 pt-20 relative z-10">
+        
+        <div class="max-w-3xl mb-12">
+            <h4 class="text-accent font-black uppercase tracking-[0.4em] text-[10px] mb-4">Personal Library</h4>
+            <h1 class="text-4xl md:text-5xl font-black text-white tracking-tighter leading-tight">
+                YOUR <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-orange-500">BOOKMARKS.</span>
+            </h1>
+            <p class="text-slate-400 mt-4 text-lg">
+                Quickly access the challenges you've saved for review or deeper practice.
+            </p>
+        </div>
+
+        {% if bookmarks %}
+            <div class="grid grid-cols-1 gap-4">
+                {% for bookmark in bookmarks %}
+                <div class="group relative bg-white/[0.02] border border-white/5 rounded-2xl p-6 hover:bg-white/[0.04] hover:border-white/20 transition-all duration-300">
+                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+                        
+                        <div class="flex-1">
+                            <h3 class="text-xl font-bold mb-3">
+                                <a href="{% url 'question_detail' bookmark.question.topic.slug bookmark.question.slug %}" 
+                                   class="text-white group-hover:text-accent transition-colors duration-300">
+                                    {{ bookmark.question.title }}
+                                </a>
+                            </h3>
+                            
+                            <div class="flex flex-wrap gap-3">
+                                <span class="px-3 py-1 bg-white/5 text-slate-400 border border-white/10 rounded-lg text-[10px] font-black uppercase tracking-widest flex items-center gap-2">
+                                    <span>{{ bookmark.question.topic.icon }}</span>
+                                    {{ bookmark.question.topic.name }}
+                                </span>
+
+                                {% if bookmark.question.difficulty == 'Easy' %}
+                                    <span class="px-3 py-1 bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 rounded-lg text-[10px] font-black uppercase tracking-widest">Easy</span>
+                                {% elif bookmark.question.difficulty == 'Medium' %}
+                                    <span class="px-3 py-1 bg-amber-500/10 text-amber-500 border border-amber-500/20 rounded-lg text-[10px] font-black uppercase tracking-widest">Medium</span>
+                                {% else %}
+                                    <span class="px-3 py-1 bg-rose-500/10 text-rose-500 border border-rose-500/20 rounded-lg text-[10px] font-black uppercase tracking-widest">Hard</span>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="flex items-center gap-4 shrink-0 w-full md:w-auto">
+                            <a href="{% url 'question_detail' bookmark.question.topic.slug bookmark.question.slug %}" 
+                               class="flex-1 md:flex-none h-12 px-8 flex items-center justify-center bg-white/5 hover:bg-accent text-white hover:text-black rounded-xl font-bold text-xs uppercase tracking-widest transition-all border border-white/10 hover:border-accent group/btn">
+                                Resume Practice
+                                <i class="fas fa-chevron-right ml-2 text-[10px] opacity-50 group-hover/btn:translate-x-1 transition-transform"></i>
                             </a>
-                        </h3>
-                        <div class="flex flex-wrap gap-2">
-                            <span class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm">
-                                {{ bookmark.question.topic.icon }} {{ bookmark.question.topic.name }}
-                            </span>
-                            <span class="px-3 py-1 rounded-full text-sm 
-                                {% if bookmark.question.difficulty == 'Easy' %}bg-green-100 text-green-700
-                                {% elif bookmark.question.difficulty == 'Medium' %}bg-yellow-100 text-yellow-700
-                                {% else %}bg-red-100 text-red-700{% endif %}">
-                                {{ bookmark.question.difficulty }}
-                            </span>
                         </div>
                     </div>
-                    <a href="{% url 'question_detail' bookmark.question.topic.slug bookmark.question.slug %}" class="ml-4 bg-primary text-white px-4 py-2 rounded-lg hover:bg-blue-800 transition">
-                        Practice
-                    </a>
                 </div>
+                {% endfor %}
             </div>
-            {% endfor %}
-        </div>
-    {% else %}
-        <div class="bg-white rounded-xl shadow-lg p-12 text-center">
-            <div class="text-5xl mb-4">📑</div>
-            <h3 class="text-xl font-bold text-gray-700">No bookmarks yet</h3>
-            <p class="text-gray-500 mt-2">Start bookmarking questions to see them here!</p>
-            <a href="{% url 'all_questions' %}" class="inline-block mt-4 bg-primary text-white px-6 py-2 rounded-lg hover:bg-blue-800 transition">
-                Browse Questions
-            </a>
-        </div>
-    {% endif %}
+        {% else %}
+            <div class="py-24 bg-white/[0.02] border border-dashed border-white/10 rounded-[3rem] text-center">
+                <div class="inline-flex items-center justify-center w-24 h-24 rounded-full bg-white/5 mb-8 text-5xl opacity-30">
+                    <i class="far fa-bookmark text-slate-400"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-white mb-3">No Saved Challenges</h3>
+                <p class="text-slate-500 max-w-sm mx-auto mb-8">Your bookmarks is currently empty. Start exploring our curriculum to save high-value questions.</p>
+                <a href="{% url 'all_topics' %}" class="inline-flex items-center justify-center px-8 py-4 bg-accent text-black font-black text-xs uppercase tracking-widest rounded-2xl hover:scale-105 transition-transform">
+                    Browse Curriculums
+                </a>
+            </div>
+        {% endif %}
+        
+    </div>
 </div>
 {% endblock %}

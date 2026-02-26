@@ -1,171 +1,162 @@
 {% extends 'base.html' %}
 
-{% block title %}Dashboard - TechlancePrep{% endblock %}
+{% block title %}Command Center | TechlancePrep{% endblock %}
 
 {% block content %}
-<div class="container mx-auto px-4 py-12">
-    <h1 class="text-3xl font-bold mb-8">Your Dashboard</h1>
+<div class="min-h-screen bg-[#0B0F1A] pb-24 text-slate-300">
     
-    <!-- Stats Cards -->
-    <div class="grid md:grid-cols-4 gap-6 mb-8">
-        <div class="bg-white rounded-xl shadow-lg p-6">
-            <div class="flex items-center justify-between">
-                <div>
-                    <p class="text-gray-500">Total Questions</p>
-                    <p class="text-3xl font-bold text-primary">{{ total_questions }}</p>
-                </div>
-                <div class="text-4xl text-primary">📚</div>
+    <div class="relative py-12 border-b border-white/5 overflow-hidden">
+        <div class="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_30%_50%,_rgba(0,255,153,0.05),transparent)] pointer-events-none"></div>
+        <div class="container mx-auto px-6 relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+            <div>
+                <h4 class="text-accent font-black uppercase tracking-[0.4em] text-[10px] mb-2">User Workspace</h4>
+                <h1 class="text-4xl font-black text-white tracking-tighter">
+                    COMMAND <span class="text-accent">CENTER</span>
+                </h1>
             </div>
-        </div>
-        
-        <div class="bg-white rounded-xl shadow-lg p-6">
-            <div class="flex items-center justify-between">
-                <div>
-                    <p class="text-gray-500">Completed</p>
-                    <p class="text-3xl font-bold text-green-600">{{ completed_count }}</p>
+            <div class="flex items-center gap-3 bg-white/5 border border-white/10 p-2 rounded-2xl backdrop-blur-md">
+                <div class="px-4 py-2 bg-accent/10 border border-accent/20 rounded-xl">
+                    <span class="text-xs font-black text-accent uppercase tracking-widest">Efficiency:</span>
+                    <span class="text-white font-bold ml-2">{{ progress }}%</span>
                 </div>
-                <div class="text-4xl text-green-600">✅</div>
-            </div>
-        </div>
-        
-        <div class="bg-white rounded-xl shadow-lg p-6">
-            <div class="flex items-center justify-between">
-                <div>
-                    <p class="text-gray-500">Bookmarks</p>
-                    <p class="text-3xl font-bold text-yellow-600">{{ bookmark_count }}</p>
-                </div>
-                <div class="text-4xl text-yellow-600">🔖</div>
-            </div>
-        </div>
-        
-        <div class="bg-white rounded-xl shadow-lg p-6">
-            <div class="flex items-center justify-between">
-                <div>
-                    <p class="text-gray-500">Progress</p>
-                    <p class="text-3xl font-bold text-accent">{{ progress }}%</p>
-                </div>
-                <div class="text-4xl text-accent">📊</div>
             </div>
         </div>
     </div>
-    
-    <!-- Progress Bar -->
-    <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
-        <h2 class="text-xl font-bold mb-4">Overall Progress</h2>
-        <div class="w-full bg-gray-200 rounded-full h-4">
-            <div class="bg-accent h-4 rounded-full transition-all duration-500" style="width: {{ progress }}%"></div>
+
+    <div class="container mx-auto px-6 mt-12">
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+            <div class="bg-white/[0.03] border border-white/10 rounded-[2rem] p-8 hover:border-white/20 transition-all group">
+                <div class="flex justify-between items-start mb-4">
+                    <div class="w-12 h-12 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-400 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-terminal"></i>
+                    </div>
+                    <span class="text-[10px] font-black text-slate-500 uppercase tracking-widest italic">Inventory</span>
+                </div>
+                <p class="text-4xl font-black text-white">{{ total_questions }}</p>
+                <p class="text-sm text-slate-500 font-medium mt-1">Available Units</p>
+            </div>
+
+            <div class="bg-white/[0.03] border border-white/10 rounded-[2rem] p-8 hover:border-emerald-500/30 transition-all group">
+                <div class="flex justify-between items-start mb-4">
+                    <div class="w-12 h-12 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-400 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-check-double"></i>
+                    </div>
+                    <span class="text-[10px] font-black text-slate-500 uppercase tracking-widest italic">Resolved</span>
+                </div>
+                <p class="text-4xl font-black text-white">{{ completed_count }}</p>
+                <p class="text-sm text-slate-500 font-medium mt-1">Units Mastered</p>
+            </div>
+
+            <div class="bg-white/[0.03] border border-white/10 rounded-[2rem] p-8 hover:border-amber-500/30 transition-all group">
+                <div class="flex justify-between items-start mb-4">
+                    <div class="w-12 h-12 rounded-xl bg-amber-500/10 flex items-center justify-center text-amber-400 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-bookmark"></i>
+                    </div>
+                    <span class="text-[10px] font-black text-slate-500 uppercase tracking-widest italic">Saved</span>
+                </div>
+                <p class="text-4xl font-black text-white">{{ bookmark_count }}</p>
+                <p class="text-sm text-slate-500 font-medium mt-1">Flagged Challenges</p>
+            </div>
+
+            <div class="bg-accent rounded-[2rem] p-8 shadow-accent-glow text-white group">
+                <div class="flex justify-between items-start mb-4 text-white/80">
+                    <div class="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center text-white">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <span class="text-[10px] font-black uppercase tracking-widest italic">Score</span>
+                </div>
+                <p class="text-4xl font-black">{{ progress }}%</p>
+                <div class="mt-4 h-1.5 w-full bg-white/20 rounded-full overflow-hidden">
+                    <div class="h-full bg-white" style="width: {{ progress }}%"></div>
+                </div>
+            </div>
         </div>
-        <p class="text-gray-600 mt-2">{{ completed_count }} out of {{ total_questions }} questions completed</p>
-    </div>
-    
-    <div class="grid md:grid-cols-2 gap-8">
-        <!-- Topic-wise Progress -->
-        <div class="bg-white rounded-xl shadow-lg p-6">
-            <h2 class="text-xl font-bold mb-4">Topic-wise Progress</h2>
-            {% if topics_progress %}
-                <div class="space-y-4">
-                    {% for topic in topics_progress %}
-                    <div>
-                        <div class="flex justify-between mb-1">
-                            <span class="font-medium">{{ topic.topic.icon }} {{ topic.topic.name }}</span>
-                            <span class="text-gray-600">{{ topic.completed }}/{{ topic.total }}</span>
+
+        <div class="grid lg:grid-cols-3 gap-8">
+            
+            <div class="lg:col-span-2 space-y-8">
+                <div class="bg-white/[0.02] border border-white/5 rounded-[2.5rem] p-10">
+                    <h2 class="text-xl font-bold text-white mb-8 flex items-center gap-3">
+                        <span class="w-2 h-8 bg-accent rounded-full"></span>
+                        Curriculum Mastery
+                    </h2>
+                    
+                    <div class="grid md:grid-cols-2 gap-x-12 gap-y-8">
+                        {% for topic in topics_progress %}
+                        <div class="space-y-3">
+                            <div class="flex justify-between items-end">
+                                <span class="text-sm font-bold text-slate-300">{{ topic.topic.icon }} {{ topic.topic.name }}</span>
+                                <span class="text-[10px] font-black text-slate-500 uppercase">{{ topic.completed }}/{{ topic.total }}</span>
+                            </div>
+                            <div class="h-2 w-full bg-white/5 rounded-full overflow-hidden border border-white/5">
+                                <div class="h-full bg-gradient-to-r from-accent/50 to-accent rounded-full shadow-accent-glow" style="width: {{ topic.percent }}%"></div>
+                            </div>
                         </div>
-                        <div class="w-full bg-gray-200 rounded-full h-2">
-                            <div class="bg-primary h-2 rounded-full" style="width: {{ topic.percent }}%"></div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="bg-white/[0.02] border border-white/5 rounded-[2.5rem] p-10">
+                    <h2 class="text-xl font-bold text-white mb-8">Intensity Analysis</h2>
+                    <div class="space-y-6">
+                        {% for diff, stats in difficulty_stats.items %}
+                        <div class="flex items-center gap-6">
+                            <div class="w-20 text-[10px] font-black uppercase tracking-widest 
+                                {% if diff == 'Easy' %}text-emerald-500{% elif diff == 'Medium' %}text-amber-500{% else %}text-rose-500{% endif %}">
+                                {{ diff }}
+                            </div>
+                            <div class="flex-1 h-4 bg-white/5 rounded-lg overflow-hidden flex items-center px-1">
+                                <div class="h-1.5 rounded-full shadow-lg
+                                    {% if diff == 'Easy' %}bg-emerald-500{% elif diff == 'Medium' %}bg-amber-500{% else %}bg-rose-500{% endif %}" 
+                                    style="width: {{ stats.percent }}%"></div>
+                            </div>
+                            <div class="w-12 text-right text-xs font-bold text-white">{{ stats.percent }}%</div>
                         </div>
-                    </div>
-                    {% endfor %}
-                </div>
-            {% else %}
-                <p class="text-gray-500">No topics available yet.</p>
-            {% endif %}
-        </div>
-        
-        <!-- Difficulty-wise Progress -->
-        <div class="bg-white rounded-xl shadow-lg p-6">
-            <h2 class="text-xl font-bold mb-4">Difficulty-wise Progress</h2>
-            <div class="space-y-4">
-                <div>
-                    <div class="flex justify-between mb-1">
-                        <span class="font-medium text-green-600">Easy</span>
-                        <span class="text-gray-600">{{ difficulty_stats.Easy.completed }}/{{ difficulty_stats.Easy.total }}</span>
-                    </div>
-                    <div class="w-full bg-gray-200 rounded-full h-2">
-                        <div class="bg-green-500 h-2 rounded-full" style="width: {{ difficulty_stats.Easy.percent }}%"></div>
+                        {% endfor %}
                     </div>
                 </div>
-                <div>
-                    <div class="flex justify-between mb-1">
-                        <span class="font-medium text-yellow-600">Medium</span>
-                        <span class="text-gray-600">{{ difficulty_stats.Medium.completed }}/{{ difficulty_stats.Medium.total }}</span>
-                    </div>
-                    <div class="w-full bg-gray-200 rounded-full h-2">
-                        <div class="bg-yellow-500 h-2 rounded-full" style="width: {{ difficulty_stats.Medium.percent }}%"></div>
-                    </div>
-                </div>
-                <div>
-                    <div class="flex justify-between mb-1">
-                        <span class="font-medium text-red-600">Hard</span>
-                        <span class="text-gray-600">{{ difficulty_stats.Hard.completed }}/{{ difficulty_stats.Hard.total }}</span>
-                    </div>
-                    <div class="w-full bg-gray-200 rounded-full h-2">
-                        <div class="bg-red-500 h-2 rounded-full" style="width: {{ difficulty_stats.Hard.percent }}%"></div>
+            </div>
+
+            <div class="space-y-8">
+                <div class="bg-white/[0.03] border border-white/10 rounded-[2.5rem] p-8 h-full">
+                    <h2 class="text-xl font-bold text-white mb-8">Recent Logs</h2>
+                    
+                    <div class="space-y-6 relative before:absolute before:left-[19px] before:top-2 before:bottom-2 before:w-px before:bg-white/10">
+                        {% for completed in recent_completed %}
+                        <div class="relative pl-12 group">
+                            <div class="absolute left-0 top-1 w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-500 z-10 group-hover:bg-emerald-500 group-hover:text-white transition-all">
+                                <i class="fas fa-check text-xs"></i>
+                            </div>
+                            <p class="text-sm font-bold text-white truncate">{{ completed.question.title }}</p>
+                            <p class="text-[10px] text-slate-500 uppercase font-black tracking-tighter mt-1">Mastered {{ completed.completed_at|timesince }} ago</p>
+                        </div>
+                        {% endfor %}
+
+                        {% for bookmark in recent_bookmarks %}
+                        <div class="relative pl-12 group">
+                            <div class="absolute left-0 top-1 w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-500 z-10 group-hover:bg-amber-500 group-hover:text-white transition-all">
+                                <i class="fas fa-bookmark text-xs"></i>
+                            </div>
+                            <p class="text-sm font-bold text-white truncate">{{ bookmark.question.title }}</p>
+                            <p class="text-[10px] text-slate-500 uppercase font-black tracking-tighter mt-1">Flagged {{ bookmark.created_at|timesince }} ago</p>
+                        </div>
+                        {% endfor %}
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    
-    <!-- Recent Activity -->
-    <div class="grid md:grid-cols-2 gap-8 mt-8">
-        <!-- Recently Completed -->
-        <div class="bg-white rounded-xl shadow-lg p-6">
-            <h2 class="text-xl font-bold mb-4">Recently Completed</h2>
-            {% if recent_completed %}
-                <div class="space-y-3">
-                    {% for completed in recent_completed %}
-                    <div class="flex items-center justify-between p-3 bg-green-50 rounded-lg">
-                        <div>
-                            <p class="font-medium">{{ completed.question.title }}</p>
-                            <p class="text-sm text-gray-500">{{ completed.completed_at|timesince }} ago</p>
-                        </div>
-                        <span class="text-green-600">✅</span>
-                    </div>
-                    {% endfor %}
-                </div>
-            {% else %}
-                <p class="text-gray-500">No completed questions yet. Start practicing!</p>
-            {% endif %}
+
+        <div class="mt-12 bg-gradient-to-br from-accent/20 to-blue-600/20 border border-white/10 rounded-[3rem] p-12 text-center relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-64 h-64 bg-accent/10 rounded-full blur-[80px] -mr-32 -mt-32"></div>
+            <h2 class="text-3xl font-black text-white mb-4">READY TO ASCEND?</h2>
+            <p class="text-slate-400 mb-8 max-w-lg mx-auto">Don't break your streak. High-growth roles require consistent technical discipline.</p>
+            <a href="{% url 'all_topics' %}" class="inline-block px-10 py-4 bg-white text-black font-black uppercase tracking-[0.2em] rounded-2xl hover:bg-accent hover:text-white transition-all shadow-xl">
+                Resume Training
+            </a>
         </div>
-        
-        <!-- Recently Bookmarked -->
-        <div class="bg-white rounded-xl shadow-lg p-6">
-            <h2 class="text-xl font-bold mb-4">Recently Bookmarked</h2>
-            {% if recent_bookmarks %}
-                <div class="space-y-3">
-                    {% for bookmark in recent_bookmarks %}
-                    <div class="flex items-center justify-between p-3 bg-yellow-50 rounded-lg">
-                        <div>
-                            <p class="font-medium">{{ bookmark.question.title }}</p>
-                            <p class="text-sm text-gray-500">{{ bookmark.created_at|timesince }} ago</p>
-                        </div>
-                        <span class="text-yellow-600">🔖</span>
-                    </div>
-                    {% endfor %}
-                </div>
-            {% else %}
-                <p class="text-gray-500">No bookmarks yet. Bookmark questions to save them!</p>
-            {% endif %}
-        </div>
+
     </div>
-    
-    <!-- Quick Actions -->
-    <div class="bg-gradient-to-r from-primary to-blue-900 rounded-xl shadow-lg p-8 mt-8 text-white text-center">
-        <h2 class="text-2xl font-bold mb-4">Ready to Practice More?</h2>
-        <p class="text-gray-300 mb-6">Keep up the momentum! New questions are waiting for you.</p>
-        <a href="{% url 'all_questions' %}" class="inline-block bg-accent text-white px-8 py-3 rounded-lg font-semibold hover:bg-green-600 transition">
-            Start Practicing
-        </a>
-    </div>
+
 </div>
 {% endblock %}

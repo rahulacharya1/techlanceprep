@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block title %}Operational Terms | TechlancePrep{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-[#0B0F1A] pb-24 text-slate-400">
+    <div class="relative py-20 border-b border-white/5 overflow-hidden">
+        <div class="absolute top-0 right-0 w-full h-full bg-[radial-gradient(circle_at_70%_30%,_rgba(59,130,246,0.03),transparent)] pointer-events-none"></div>
+        <div class="container mx-auto px-6 text-center relative z-10">
+            <h4 class="text-blue-500 font-black uppercase tracking-[0.4em] text-[10px] mb-4">User Agreement</h4>
+            <h1 class="text-5xl font-black text-white tracking-tighter mb-6">TERMS OF <span class="text-blue-500">SERVICE</span></h1>
+            <p class="max-w-2xl mx-auto text-slate-500">By accessing the Command Center, you agree to the following operational protocols.</p>
+        </div>
+    </div>
+
+    <div class="container mx-auto px-6 mt-16 max-w-4xl">
+        <div class="bg-white/[0.02] border border-white/5 rounded-[2.5rem] p-10 md:p-16 space-y-12 leading-relaxed">
+            
+            <section>
+                <h2 class="text-xl font-bold text-white mb-4 flex items-center gap-3">
+                    <span class="w-1.5 h-6 bg-blue-500 rounded-full"></span> 01. Acceptance of Terms
+                </h2>
+                <p>By registering an account on TechlancePrep, you acknowledge that you have read, understood, and agreed to be bound by these operational terms. These terms govern your use of our coding labs, technical core modules, and behavioral training.</p>
+            </section>
+
+            <section>
+                <h2 class="text-xl font-bold text-white mb-4 flex items-center gap-3">
+                    <span class="w-1.5 h-6 bg-blue-500 rounded-full"></span> 02. Intellectual Property
+                </h2>
+                <p>All curriculum content, including logic challenges, system design patterns, and proprietary behavioral frameworks, are the intellectual property of TechlancePrep. Users are granted a limited, non-exclusive license to use these materials for personal career preparation only.</p>
+            </section>
+
+            <section>
+                <h2 class="text-xl font-bold text-white mb-4 flex items-center gap-3">
+                    <span class="w-1.5 h-6 bg-blue-500 rounded-full"></span> 03. User Conduct
+                </h2>
+                <p>Users must not attempt to scrape, reverse engineer, or disrupt the platform's efficiency. Automated access to the questions via bots or scripts without explicit authorization is strictly prohibited.</p>
+            </section>
+
+            <section class="bg-blue-500/5 border border-blue-500/10 p-6 rounded-2xl italic">
+                <p class="text-sm">Note: TechlancePrep is a training tool. While we provide high-intensity preparation, we do not guarantee specific employment outcomes with external organizations.</p>
+            </section>
+        </div>
+    </div>
+</div>
+{% endblock %}

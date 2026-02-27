@@ -2,81 +2,111 @@
 
 {% block title %}Manage Questions - Admin Panel{% endblock %}
 
-{% block page_title %}Manage Questions{% endblock %}
-{% block page_subtitle %}All practice questions{% endblock %}
+{% block page_title %}Question Ledger{% endblock %}
+{% block page_subtitle %}Central repository for all training assets{% endblock %}
 
 {% block content %}
-<!-- Add Question Button -->
-<div class="mb-6 flex justify-between items-center">
-    <a href="/admin/practice/question/add/" target="_blank" class="inline-flex items-center px-4 py-2 bg-primary text-white rounded-lg hover:bg-blue-800 transition">
-        <i class="fas fa-plus mr-2"></i> Add New Question
+<div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 mb-10">
+    <a href="{% url 'add_question' %}" class="bg-[#00ff99] text-black px-6 py-3 rounded-xl font-black uppercase tracking-widest text-xs hover:bg-[#00e68a] hover:shadow-[0_0_20px_rgba(0,255,153,0.3)] transition-all flex items-center shrink-0">
+        <i class="fas fa-plus mr-2"></i> New Entry
     </a>
-    <span class="text-gray-500">{{ questions.count }} total questions</span>
+    
+    <form method="GET" class="flex flex-wrap gap-3 w-full lg:w-auto">
+        <div class="relative flex-1 lg:flex-none">
+            <select name="topic" class="w-full lg:w-auto appearance-none bg-white/[0.03] border border-white/10 px-10 py-3 rounded-xl text-xs font-bold focus:outline-none focus:border-[#00ff99]/50 transition-all cursor-pointer" onchange="this.form.submit()">
+                <option value="" class="bg-[#0B0F1A]">All Topics</option>
+                {% for topic in topics %}
+                <option value="{{ topic.slug }}" {% if topic_filter == topic.slug %}selected{% endif %} class="bg-[#0B0F1A]">{{ topic.name }}</option>
+                {% endfor %}
+            </select>
+            <i class="fas fa-filter absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 text-[10px]"></i>
+        </div>
+        
+        <div class="relative flex-1 lg:flex-none">
+            <select name="difficulty" class="w-full lg:w-auto appearance-none bg-white/[0.03] border border-white/10 px-10 py-3 rounded-xl text-xs font-bold focus:outline-none focus:border-[#00ff99]/50 transition-all cursor-pointer" onchange="this.form.submit()">
+                <option value="" class="bg-[#0B0F1A]">Difficulty</option>
+                <option value="Easy" {% if difficulty_filter == 'Easy' %}selected{% endif %} class="bg-[#0B0F1A]">Easy</option>
+                <option value="Medium" {% if difficulty_filter == 'Medium' %}selected{% endif %} class="bg-[#0B0F1A]">Medium</option>
+                <option value="Hard" {% if difficulty_filter == 'Hard' %}selected{% endif %} class="bg-[#0B0F1A]">Hard</option>
+            </select>
+            <i class="fas fa-signal absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 text-[10px]"></i>
+        </div>
+
+        <div class="relative flex-1 lg:flex-none">
+            <select name="type" class="w-full lg:w-auto appearance-none bg-white/[0.03] border border-white/10 px-10 py-3 rounded-xl text-xs font-bold focus:outline-none focus:border-[#00ff99]/50 transition-all cursor-pointer" onchange="this.form.submit()">
+                <option value="" class="bg-[#0B0F1A]">Category</option>
+                <option value="coding" {% if type_filter == 'coding' %}selected{% endif %} class="bg-[#0B0F1A]">Coding</option>
+                <option value="technical" {% if type_filter == 'technical' %}selected{% endif %} class="bg-[#0B0F1A]">Technical</option>
+                <option value="hr" {% if type_filter == 'hr' %}selected{% endif %} class="bg-[#0B0F1A]">HR</option>
+            </select>
+            <i class="fas fa-tag absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 text-[10px]"></i>
+        </div>
+    </form>
 </div>
 
-<!-- Questions Table -->
-<div class="bg-white rounded-xl shadow-lg overflow-hidden">
-    <div class="overflow-x-auto">
-        <table class="w-full">
-            <thead class="bg-gray-100">
-                <tr>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Question</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Topic</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Difficulty</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Created</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-                </tr>
-            </thead>
-            <tbody class="bg-white divide-y divide-gray-200">
-                {% for question in questions %}
-                <tr class="hover:bg-gray-50">
-                    <td class="px-6 py-4">
-                        <div class="text-sm font-medium text-gray-900">{{ question.title }}</div>
-                        <div class="text-sm text-gray-500 truncate max-w-xs">{{ question.description|truncatewords:10 }}</div>
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap">
-                        <span class="px-2 py-1 bg-gray-100 text-gray-700 rounded text-sm">
-                            {{ question.topic.icon }} {{ question.topic.name }}
-                        </span>
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap">
-                        <span class="px-2 py-1 rounded text-xs font-medium
-                            {% if question.difficulty == 'Easy' %}bg-green-100 text-green-700
-                            {% elif question.difficulty == 'Medium' %}bg-yellow-100 text-yellow-700
-                            {% else %}bg-red-100 text-red-700{% endif %}">
-                            {{ question.difficulty }}
-                        </span>
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {{ question.created_at|date:"M d, Y" }}
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                        <div class="flex gap-3">
-                            <a href="{% url 'question_detail' question.topic.slug question.slug %}" target="_blank" class="text-blue-600 hover:text-blue-900" title="View">
-                                <i class="fas fa-eye"></i>
-                            </a>
-                            <a href="/admin/practice/question/{{ question.id }}/change/" target="_blank" class="text-yellow-600 hover:text-yellow-900" title="Edit">
-                                <i class="fas fa-edit"></i>
-                            </a>
-                            <a href="/admin/practice/question/{{ question.id }}/delete/" target="_blank" class="text-red-600 hover:text-red-900" title="Delete">
-                                <i class="fas fa-trash"></i>
-                            </a>
-                        </div>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+{% if questions %}
+    <div class="bg-white/[0.02] border border-white/5 rounded-[2rem] overflow-hidden shadow-2xl backdrop-blur-sm">
+        <div class="overflow-x-auto">
+            <table class="w-full border-collapse">
+                <thead>
+                    <tr class="border-b border-white/5 bg-white/[0.01]">
+                        <th class="px-8 py-5 text-left text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">Subject Matter</th>
+                        <th class="px-6 py-5 text-left text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">Module</th>
+                        <th class="px-6 py-5 text-left text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">Tier</th>
+                        <th class="px-8 py-5 text-right text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">Control</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-white/[0.03]">
+                    {% for question in questions %}
+                    <tr class="hover:bg-white/[0.02] transition-colors group">
+                        <td class="px-8 py-5">
+                            <div class="text-sm font-bold text-white group-hover:text-[#00ff99] transition-colors">{{ question.title }}</div>
+                            <div class="text-[11px] text-slate-500 mt-1 font-medium italic opacity-70">{{ question.description|truncatewords:8 }}</div>
+                        </td>
+                        <td class="px-6 py-5 whitespace-nowrap">
+                            <span class="flex items-center gap-2 text-slate-400 text-xs font-bold">
+                                <span class="text-lg">{{ question.topic.icon }}</span>
+                                {{ question.topic.name }}
+                            </span>
+                        </td>
+                        <td class="px-6 py-5 whitespace-nowrap">
+                            <span class="inline-flex items-center px-2.5 py-1 rounded-md text-[9px] font-black uppercase tracking-widest border
+                                {% if question.difficulty == 'Easy' %}bg-emerald-500/10 text-emerald-400 border-emerald-500/20
+                                {% elif question.difficulty == 'Medium' %}bg-amber-500/10 text-amber-400 border-amber-500/20
+                                {% else %}bg-rose-500/10 text-rose-400 border-rose-500/20{% endif %}">
+                                <span class="w-1 h-1 rounded-full mr-2 
+                                    {% if question.difficulty == 'Easy' %}bg-emerald-400
+                                    {% elif question.difficulty == 'Medium' %}bg-amber-400
+                                    {% else %}bg-rose-400{% endif %}"></span>
+                                {{ question.difficulty }}
+                            </span>
+                        </td>
+                        <td class="px-8 py-5 whitespace-nowrap text-right">
+                            <div class="flex justify-end gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                <a href="{% url 'edit_question' question.id %}" class="w-9 h-9 flex items-center justify-center bg-white/5 text-slate-400 rounded-xl hover:bg-[#00ff99] hover:text-black transition-all">
+                                    <i class="fas fa-pen-nib text-xs"></i>
+                                </a>
+                                <a href="{% url 'delete_question' question.id %}" class="w-9 h-9 flex items-center justify-center bg-white/5 text-slate-400 rounded-xl hover:bg-rose-500 hover:text-white transition-all" onclick="return confirm('Confirm permanent deletion of this record?')">
+                                    <i class="fas fa-trash-can text-xs"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
-    
-    {% if not questions %}
-    <div class="p-12 text-center">
-        <i class="fas fa-question-circle text-gray-300 text-5xl mb-4"></i>
-        <p class="text-gray-500">No questions found. Add questions from Django Admin!</p>
-        <a href="/admin/practice/question/add/" target="_blank" class="inline-block mt-4 bg-primary text-white px-6 py-2 rounded-lg hover:bg-blue-800 transition">
-            Add First Question
+{% else %}
+    <div class="bg-white/[0.02] border border-white/5 border-dashed rounded-[3rem] p-20 text-center">
+        <div class="w-20 h-20 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-6">
+            <i class="fas fa-database text-slate-700 text-3xl"></i>
+        </div>
+        <h3 class="text-lg font-black text-white uppercase tracking-widest">No Records Found</h3>
+        <p class="text-slate-500 mt-2 text-sm font-medium">The system query returned zero results.</p>
+        <a href="{% url 'add_question' %}" class="inline-flex items-center mt-8 px-8 py-3 bg-white text-black text-xs font-black uppercase tracking-widest rounded-xl hover:bg-[#00ff99] transition-all">
+            <i class="fas fa-plus mr-2"></i> Initialize First Record
         </a>
     </div>
-    {% endif %}
-</div>
+{% endif %}
 {% endblock %}

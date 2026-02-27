@@ -1,0 +1,86 @@
+{% extends 'admin_panel/base.html' %}
+
+{% block title %}All Completions - Admin Panel{% endblock %}
+
+{% block page_title %}Success_Log{% endblock %}
+{% block page_subtitle %}Live feed of verified question completions{% endblock %}
+
+{% block content %}
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
+    <div class="flex items-center gap-3 px-5 py-2.5 bg-white/[0.03] border border-white/5 rounded-2xl backdrop-blur-md">
+        <div class="relative flex h-2 w-2">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#00ff99] opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-2 w-2 bg-[#00ff99]"></span>
+        </div>
+        <span class="text-slate-400 text-[10px] font-black uppercase tracking-[0.2em]">{{ completions.count }} Verified Solutions</span>
+    </div>
+</div>
+
+{% if completions %}
+    <div class="bg-white/[0.02] border border-white/5 rounded-[2.5rem] overflow-hidden shadow-2xl backdrop-blur-sm relative">
+        <div class="overflow-x-auto">
+            <table class="w-full border-collapse">
+                <thead>
+                    <tr class="border-b border-white/5 bg-white/[0.01]">
+                        <th class="px-8 py-5 text-left text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">Operator</th>
+                        <th class="px-6 py-5 text-left text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">Objective</th>
+                        <th class="px-6 py-5 text-left text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">Category</th>
+                        <th class="px-8 py-5 text-right text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">Completion_Time</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-white/[0.03]">
+                    {% for completion in completions %}
+                    <tr class="hover:bg-white/[0.02] transition-colors group">
+                        <td class="px-8 py-5 whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div class="w-9 h-9 bg-gradient-to-br from-[#00ff99]/20 to-emerald-600/20 rounded-xl flex items-center justify-center text-[#00ff99] text-xs font-black border border-white/5">
+                                    {{ completion.user.username|upper|slice:":1" }}
+                                </div>
+                                <div class="ml-4">
+                                    <div class="text-sm font-bold text-white group-hover:text-[#00ff99] transition-colors">{{ completion.user.username }}</div>
+                                    <div class="text-[9px] text-slate-500 uppercase font-black tracking-tighter italic">Entity_Active</div>
+                                </div>
+                            </div>
+                        </td>
+
+                        <td class="px-6 py-4">
+                            <div class="text-sm font-bold text-slate-200">{{ completion.question.title }}</div>
+                            <div class="mt-1.5 flex gap-2">
+                                <span class="text-[9px] font-black uppercase tracking-[0.1em] px-2 py-0.5 rounded-md
+                                    {% if completion.question.difficulty == 'Easy' %}bg-emerald-500/10 text-emerald-400 border border-emerald-500/20
+                                    {% elif completion.question.difficulty == 'Medium' %}bg-amber-500/10 text-amber-400 border border-amber-500/20
+                                    {% else %}bg-rose-500/10 text-rose-400 border border-rose-500/20{% endif %}">
+                                    {{ completion.question.difficulty }}
+                                </span>
+                            </div>
+                        </td>
+
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="inline-flex items-center px-3 py-1 bg-white/[0.03] border border-white/10 rounded-lg text-xs font-bold text-slate-400">
+                                <span class="mr-2 text-slate-500">{{ completion.question.topic.icon }}</span>
+                                {{ completion.question.topic.name }}
+                            </span>
+                        </td>
+
+                        <td class="px-8 py-5 whitespace-nowrap text-right">
+                            <div class="text-[11px] font-black text-slate-500 flex items-center justify-end gap-2 group-hover:text-[#00ff99] transition-colors">
+                                <i class="fas fa-check-double text-[10px]"></i>
+                                {{ completion.completed_at|date:"M d, Y" }}
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% else %}
+    <div class="bg-white/[0.02] border border-white/5 border-dashed rounded-[3rem] p-24 text-center">
+        <div class="w-20 h-20 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-6">
+            <i class="fas fa-check-circle text-slate-800 text-3xl"></i>
+        </div>
+        <h3 class="text-lg font-black text-white uppercase tracking-[0.2em]">Zero Completions</h3>
+        <p class="text-slate-500 mt-2 text-sm font-medium">System is awaiting first successful objective verification.</p>
+    </div>
+{% endif %}
+{% endblock %}

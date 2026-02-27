@@ -15,7 +15,6 @@ class Topic(models.Model):
     slug = models.SlugField(unique=True, blank=True)
     description = models.TextField(blank=True)
     icon = models.CharField(max_length=50, default='📚')
-    topic_type = models.CharField(max_length=20, choices=TOPIC_TYPE_CHOICES, default='coding')
     created_at = models.DateTimeField(auto_now_add=True)
     
     def save(self, *args, **kwargs):

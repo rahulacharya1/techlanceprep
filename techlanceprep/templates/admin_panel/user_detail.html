@@ -1,0 +1,115 @@
+{% extends 'admin_panel/base.html' %}
+
+{% block title %}{{ view_user.username }} - Profile Dossier{% endblock %}
+
+{% block page_title %}Profile_Dossier{% endblock %}
+{% block page_subtitle %}In-depth activity telemetry for entity: {{ view_user.username }}{% endblock %}
+
+{% block content %}
+<a href="{% url 'manage_users' %}" class="inline-flex items-center text-slate-500 hover:text-[#00ff99] mb-8 group transition-colors text-[10px] font-black uppercase tracking-widest">
+    <i class="fas fa-chevron-left mr-2 group-hover:-translate-x-1 transition-transform"></i> Return to Directory
+</a>
+
+<div class="bg-white/[0.02] border border-white/5 rounded-[2.5rem] p-8 mb-10 backdrop-blur-md shadow-2xl relative overflow-hidden">
+    <div class="absolute -top-24 -right-24 w-64 h-64 bg-blue-500/5 rounded-full blur-[100px] pointer-events-none"></div>
+
+    <div class="flex flex-col md:flex-row items-center gap-8 relative z-10">
+        <div class="w-24 h-24 bg-gradient-to-br from-[#00ff99]/20 to-blue-600/20 rounded-3xl flex items-center justify-center text-[#00ff99] text-4xl font-black border border-white/10 shadow-[inset_0_0_20px_rgba(0,255,153,0.1)]">
+            {{ view_user.username|upper|slice:":1" }}
+        </div>
+        
+        <div class="flex-1 text-center md:text-left">
+            <h2 class="text-3xl font-black text-white tracking-tighter">{{ view_user.username }}</h2>
+            <p class="text-slate-400 font-medium">{{ view_user.email }}</p>
+            <div class="flex flex-wrap justify-center md:justify-start gap-4 mt-4">
+                <p class="text-slate-500 text-[10px] font-black uppercase tracking-widest flex items-center gap-2">
+                    <i class="fas fa-id-card text-[#00ff99]"></i>
+                    Member since {{ view_user.date_joined|date:"M d, Y" }}
+                </p>
+                <p class="text-slate-500 text-[10px] font-black uppercase tracking-widest flex items-center gap-2">
+                    <i class="fas fa-microchip text-blue-500"></i>
+                    Status: Verified Entity
+                </p>
+            </div>
+        </div>
+
+        <div class="shrink-0">
+            {% if view_user.is_superuser %}
+                <span class="bg-amber-500/10 text-amber-400 border border-amber-500/20 px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] shadow-[0_0_20px_rgba(245,158,11,0.1)]">
+                    Superuser_Root
+                </span>
+            {% elif view_user.is_admin %}
+                <span class="bg-blue-500/10 text-blue-400 border border-blue-500/20 px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-[0.2em]">
+                    Admin_Access
+                </span>
+            {% else %}
+                <span class="bg-white/5 text-slate-500 border border-white/10 px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-[0.2em]">
+                    Standard_Node
+                </span>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<div class="grid lg:grid-cols-2 gap-8">
+    <div class="bg-white/[0.02] border border-white/5 rounded-[2.5rem] p-8 backdrop-blur-sm">
+        <h3 class="text-xs font-black text-white uppercase tracking-[0.3em] mb-8 flex items-center gap-3">
+            <span class="w-1.5 h-1.5 bg-amber-500 rounded-full animate-pulse"></span>
+            Saved Resources ({{ bookmarks.count }})
+        </h3>
+        
+        {% if bookmarks %}
+            <div class="space-y-4">
+                {% for bookmark in bookmarks %}
+                <div class="group p-5 bg-white/[0.02] border border-white/5 rounded-2xl hover:border-amber-500/30 transition-all">
+                    <p class="font-bold text-slate-200 group-hover:text-white transition-colors">{{ bookmark.question.title }}</p>
+                    <div class="flex items-center justify-between mt-3">
+                        <span class="text-[10px] font-black uppercase tracking-widest text-slate-500">
+                            {{ bookmark.question.topic.icon }} {{ bookmark.question.topic.name }}
+                        </span>
+                        <span class="text-[9px] font-medium text-slate-600 italic">
+                            Saved {{ bookmark.created_at|date:"M d, Y" }}
+                        </span>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="text-center py-10">
+                <i class="fas fa-folder-open text-slate-800 text-4xl mb-4"></i>
+                <p class="text-slate-600 text-xs font-bold uppercase tracking-widest">No Bookmark Telemetry</p>
+            </div>
+        {% endif %}
+    </div>
+    
+    <div class="bg-white/[0.02] border border-white/5 rounded-[2.5rem] p-8 backdrop-blur-sm">
+        <h3 class="text-xs font-black text-white uppercase tracking-[0.3em] mb-8 flex items-center gap-3">
+            <span class="w-1.5 h-1.5 bg-[#00ff99] rounded-full animate-pulse"></span>
+            Operation History ({{ completions.count }})
+        </h3>
+        
+        {% if completions %}
+            <div class="space-y-4">
+                {% for completion in completions %}
+                <div class="group p-5 bg-white/[0.02] border border-white/5 rounded-2xl hover:border-[#00ff99]/30 transition-all">
+                    <p class="font-bold text-slate-200 group-hover:text-white transition-colors">{{ completion.question.title }}</p>
+                    <div class="flex items-center justify-between mt-3">
+                        <span class="text-[10px] font-black uppercase tracking-widest text-slate-500">
+                            {{ completion.question.topic.icon }} {{ completion.question.topic.name }}
+                        </span>
+                        <span class="text-[9px] font-black uppercase text-[#00ff99]/60">
+                            Success • {{ completion.completed_at|date:"M d, Y" }}
+                        </span>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="text-center py-10">
+                <i class="fas fa-ghost text-slate-800 text-4xl mb-4"></i>
+                <p class="text-slate-600 text-xs font-bold uppercase tracking-widest">No Completion Logs</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

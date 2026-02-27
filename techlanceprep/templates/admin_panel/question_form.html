@@ -1,0 +1,102 @@
+{% extends 'admin_panel/base.html' %}
+
+{% block title %}{{ action }} Question - Admin Panel{% endblock %}
+
+{% block page_title %}Data Entry{% endblock %}
+{% block page_subtitle %}Updating question repository core{% endblock %}
+
+{% block content %}
+<div class="max-w-5xl mx-auto pb-20">
+    <div class="bg-white/[0.02] border border-white/5 rounded-[2.5rem] p-8 md:p-12 shadow-2xl backdrop-blur-md relative overflow-hidden">
+        <div class="absolute -top-24 -right-24 w-64 h-64 bg-blue-500/5 rounded-full blur-[100px] pointer-events-none"></div>
+
+        <form method="POST" class="space-y-8 relative z-10">
+            {% csrf_token %}
+            
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="space-y-2">
+                    <label class="block text-slate-500 text-[10px] font-black uppercase tracking-[0.2em] ml-1">Problem Title <span class="text-[#00ff99]">*</span></label>
+                    <input type="text" name="title" value="{{ question.title|default:'' }}" 
+                        class="w-full bg-white/[0.03] border border-white/10 px-5 py-4 rounded-2xl text-white placeholder-slate-600 focus:outline-none focus:border-[#00ff99]/50 focus:ring-4 focus:ring-[#00ff99]/5 transition-all font-medium" 
+                        placeholder="e.g., Array Optimization" required>
+                </div>
+                
+                <div class="space-y-2">
+                    <label class="block text-slate-500 text-[10px] font-black uppercase tracking-[0.2em] ml-1">Target Module <span class="text-[#00ff99]">*</span></label>
+                    <div class="relative">
+                        <select name="topic" 
+                            class="w-full appearance-none bg-white/[0.03] border border-white/10 px-5 py-4 rounded-2xl text-white focus:outline-none focus:border-[#00ff99]/50 focus:ring-4 focus:ring-[#00ff99]/5 transition-all font-medium cursor-pointer" required>
+                            <option value="" class="bg-[#0B0F1A] text-slate-500">Assign to topic...</option>
+                            {% for topic in topics %}
+                            <option value="{{ topic.id }}" {% if question.topic.id == topic.id %}selected{% endif %} class="bg-[#0B0F1A] text-white">
+                                {{ topic.icon }} {{ topic.name }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                        <i class="fas fa-chevron-down absolute right-5 top-1/2 -translate-y-1/2 text-slate-500 text-xs pointer-events-none"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="space-y-2">
+                    <label class="block text-slate-500 text-[10px] font-black uppercase tracking-[0.2em] ml-1">Tier Assignment <span class="text-[#00ff99]">*</span></label>
+                    <div class="relative">
+                        <select name="difficulty" class="w-full appearance-none bg-white/[0.03] border border-white/10 px-5 py-4 rounded-2xl text-white focus:outline-none focus:border-[#00ff99]/50 transition-all font-medium cursor-pointer" required>
+                            <option value="Easy" {% if question.difficulty == 'Easy' %}selected{% endif %} class="bg-[#0B0F1A] text-emerald-400">Easy (Tier 1)</option>
+                            <option value="Medium" {% if question.difficulty == 'Medium' %}selected{% endif %} class="bg-[#0B0F1A] text-amber-400">Medium (Tier 2)</option>
+                            <option value="Hard" {% if question.difficulty == 'Hard' %}selected{% endif %} class="bg-[#0B0F1A] text-rose-400">Hard (Tier 3)</option>
+                        </select>
+                        <i class="fas fa-signal absolute right-5 top-1/2 -translate-y-1/2 text-slate-500 text-xs pointer-events-none"></i>
+                    </div>
+                </div>
+                
+                <div class="space-y-2">
+                    <label class="block text-slate-500 text-[10px] font-black uppercase tracking-[0.2em] ml-1">Category <span class="text-[#00ff99]">*</span></label>
+                    <div class="relative">
+                        <select name="question_type" class="w-full appearance-none bg-white/[0.03] border border-white/10 px-5 py-4 rounded-2xl text-white focus:outline-none focus:border-[#00ff99]/50 transition-all font-medium cursor-pointer" required>
+                            <option value="coding" {% if question.question_type == 'coding' %}selected{% endif %} class="bg-[#0B0F1A] text-white">💻 CODING_LOGIC</option>
+                            <option value="technical" {% if question.question_type == 'technical' %}selected{% endif %} class="bg-[#0B0F1A] text-white">💼 TECHNICAL_INTEL</option>
+                            <option value="hr" {% if question.question_type == 'hr' %}selected{% endif %} class="bg-[#0B0F1A] text-white">👤 BEHAVIORAL_HR</option>
+                        </select>
+                        <i class="fas fa-tag absolute right-5 top-1/2 -translate-y-1/2 text-slate-500 text-xs pointer-events-none"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="space-y-2">
+                <label class="block text-slate-500 text-[10px] font-black uppercase tracking-[0.2em] ml-1">Problem Specifications <span class="text-[#00ff99]">*</span></label>
+                <textarea name="description" rows="4" 
+                    class="w-full bg-white/[0.03] border border-white/10 px-6 py-5 rounded-[1.5rem] text-white placeholder-slate-600 focus:outline-none focus:border-[#00ff99]/50 transition-all font-medium resize-none leading-relaxed" 
+                    placeholder="Input detailed problem statement..." required>{{ question.description|default:'' }}</textarea>
+            </div>
+            
+            <div class="space-y-2">
+                <label class="block text-slate-400 text-[10px] font-black uppercase tracking-[0.2em] mb-1 ml-1">Reference Solution / Code Registry <span class="text-[#00ff99]">*</span></label>
+                <div class="relative rounded-[1.5rem] overflow-hidden border border-white/10 focus-within:border-[#00ff99]/50 transition-all">
+                    <div class="absolute top-0 left-0 right-0 h-8 bg-white/5 border-b border-white/5 flex items-center px-4 gap-1.5">
+                        <div class="w-2 h-2 rounded-full bg-rose-500/50"></div>
+                        <div class="w-2 h-2 rounded-full bg-amber-500/50"></div>
+                        <div class="w-2 h-2 rounded-full bg-emerald-500/50"></div>
+                    </div>
+                    <textarea name="solution" rows="10" 
+                        class="w-full bg-[#0F172A]/50 px-6 pt-12 pb-6 text-white font-mono text-sm placeholder-slate-600 focus:outline-none transition-all resize-none" 
+                        placeholder="Write the solution code or sample answer here..." required>{{ question.solution|default:'' }}</textarea>
+                </div>
+                <p class="text-slate-600 text-[9px] font-bold uppercase mt-2 ml-1 tracking-widest italic">Supports markdown and standard code blocks</p>
+            </div>
+            
+            <div class="flex flex-col sm:flex-row gap-4 pt-6">
+                <button type="submit" class="flex-1 bg-[#00ff99] text-black py-4 rounded-2xl font-black uppercase tracking-widest text-xs hover:bg-[#00e68a] hover:shadow-[0_0_30px_rgba(0,255,153,0.3)] transition-all flex items-center justify-center gap-2">
+                    <i class="fas fa-terminal"></i>
+                    {% if question %}Commit Changes{% else %}Deploy Record{% endif %}
+                </button>
+                <a href="{% url 'manage_questions' %}" class="flex-1 bg-white/5 text-slate-400 py-4 rounded-2xl font-black uppercase tracking-widest text-xs text-center border border-white/5 hover:bg-white/10 hover:text-white transition-all flex items-center justify-center gap-2">
+                    <i class="fas fa-xmark"></i>
+                    Cancel Operation
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

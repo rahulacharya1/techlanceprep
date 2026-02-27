@@ -3,42 +3,71 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Login - TechlancePrep</title>
+    <title>Terminal Access - TechlancePrep</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { background-color: #0B0F1A; }
+        .glow-input:focus {
+            box-shadow: 0 0 15px rgba(0, 255, 153, 0.2);
+        }
+    </style>
 </head>
-<body class="bg-gray-900 min-h-screen flex items-center justify-center">
-    <div class="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md">
-        <div class="text-center mb-8">
-            <div class="w-16 h-16 bg-yellow-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                <i class="fas fa-shield-alt text-white text-2xl"></i>
+<body class="min-h-screen flex items-center justify-center p-6">
+    <div class="fixed top-[-10%] left-[-10%] w-[40%] h-[40%] bg-[#00ff99]/5 rounded-full blur-[120px] pointer-events-none"></div>
+    <div class="fixed bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-blue-500/5 rounded-full blur-[120px] pointer-events-none"></div>
+
+    <div class="bg-white/[0.02] border border-white/5 backdrop-blur-xl rounded-[2.5rem] p-10 w-full max-w-md shadow-2xl relative z-10">
+        <div class="text-center mb-10">
+            <div class="w-20 h-20 bg-[#00ff99]/10 rounded-3xl flex items-center justify-center mx-auto mb-6 border border-[#00ff99]/20 shadow-[0_0_30px_rgba(0,255,153,0.1)]">
+                <i class="fas fa-shield-halved text-[#00ff99] text-3xl"></i>
             </div>
-            <h1 class="text-2xl font-bold text-gray-800">Admin Login</h1>
-            <p class="text-gray-500 mt-2">TechlancePrep Admin Panel</p>
+            <h1 class="text-3xl font-black text-white tracking-tighter italic uppercase">Admin<span class="text-[#00ff99]">.</span>Login</h1>
+            <p class="text-slate-500 text-[10px] font-black uppercase tracking-[0.3em] mt-3">Secure Encrypted Portal</p>
         </div>
         
         <form method="POST" class="space-y-6">
             {% csrf_token %}
+            
+            {% if messages %}
+                {% for message in messages %}
+                <div class="p-4 bg-rose-500/10 border border-rose-500/20 rounded-2xl text-rose-400 text-xs font-bold flex items-center gap-3">
+                    <i class="fas fa-circle-exclamation"></i>
+                    {{ message }}
+                </div>
+                {% endfor %}
+            {% endif %}
+
             <div>
-                <label class="block text-gray-700 font-semibold mb-2">Email Address</label>
-                <input type="email" name="email" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500" placeholder="admin@example.com" required>
+                <label class="block text-slate-400 text-[10px] font-black uppercase tracking-widest mb-3 ml-1">Identity / Email</label>
+                <div class="relative">
+                    <i class="fas fa-at absolute left-4 top-1/2 -translate-y-1/2 text-slate-600"></i>
+                    <input type="email" name="email" 
+                        class="glow-input w-full bg-white/[0.03] border border-white/10 px-12 py-4 rounded-2xl text-white placeholder-slate-600 focus:outline-none focus:border-[#00ff99]/50 focus:ring-1 focus:ring-[#00ff99]/50 transition-all text-sm font-medium" 
+                        placeholder="admin@techlance.prep" required>
+                </div>
             </div>
+
             <div>
-                <label class="block text-gray-700 font-semibold mb-2">Password</label>
-                <input type="password" name="password" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500" placeholder="••••••••" required>
+                <label class="block text-slate-400 text-[10px] font-black uppercase tracking-widest mb-3 ml-1">Secret Key</label>
+                <div class="relative">
+                    <i class="fas fa-lock absolute left-4 top-1/2 -translate-y-1/2 text-slate-600"></i>
+                    <input type="password" name="password" 
+                        class="glow-input w-full bg-white/[0.03] border border-white/10 px-12 py-4 rounded-2xl text-white placeholder-slate-600 focus:outline-none focus:border-[#00ff99]/50 focus:ring-1 focus:ring-[#00ff99]/50 transition-all text-sm font-medium" 
+                        placeholder="••••••••••••" required>
+                </div>
             </div>
             
-            <button type="submit" class="w-full bg-yellow-500 text-white py-3 rounded-lg font-semibold hover:bg-yellow-600 transition">
-                <i class="fas fa-sign-in-alt mr-2"></i> Login
+            <button type="submit" class="group w-full bg-[#00ff99] hover:bg-[#00e68a] text-black py-4 rounded-2xl font-black uppercase tracking-widest text-xs transition-all shadow-[0_0_20px_rgba(0,255,153,0.2)] hover:shadow-[0_0_30px_rgba(0,255,153,0.4)] flex items-center justify-center gap-2">
+                Initiate Session <i class="fas fa-chevron-right text-[10px] group-hover:translate-x-1 transition-transform"></i>
             </button>
         </form>
         
-        <div class="mt-6 text-center">
-            <a href="{% url 'home' %}" class="text-gray-500 hover:text-gray-700">
-                <i class="fas fa-arrow-left mr-2"></i> Back to Website
+        <div class="mt-10 text-center border-t border-white/5 pt-8">
+            <a href="{% url 'home' %}" class="text-slate-500 hover:text-white text-[10px] font-black uppercase tracking-widest transition-colors flex items-center justify-center gap-2">
+                <i class="fas fa-arrow-left"></i> Return to Main Terminal
             </a>
         </div>
     </div>
 </body>
 </html>
-

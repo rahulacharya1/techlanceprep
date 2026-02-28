@@ -6,20 +6,58 @@
     <title>{% block title %}TechlancePrep Admin{% endblock %}</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        /* Mobile Sidebar Animation */
+        #sidebar {
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        /* Hidden state on mobile */
+        .sidebar-closed { transform: translateX(-100%); }
+        
+        /* Desktop override */
+        @media (min-width: 1024px) {
+            #sidebar { transform: translateX(0) !important; }
+        }
+    </style>
 </head>
-<body class="bg-[#0B0F1A] min-h-screen text-slate-300">
+<body class="bg-[#0B0F1A] min-h-screen text-slate-300 overflow-x-hidden">
+
+    <header class="lg:hidden fixed top-0 left-0 right-0 h-16 bg-[#0F172A] border-b border-white/5 flex items-center justify-between px-6 z-[60]">
+        <div class="flex items-center gap-3 italic">
+            <span class="p-1.5 bg-[#00ff99]/10 rounded-lg">
+                <i class="fas fa-shield-halved text-[#00ff99] text-lg"></i>
+            </span>
+            <span class="text-lg font-black tracking-tighter uppercase text-white">
+                ADMIN<span class="text-[#00ff99]">.</span>
+            </span>
+        </div>
+        
+        <button id="mobile-toggle" class="text-[#00ff99] p-2 hover:bg-white/5 rounded-xl transition-all active:scale-95">
+            <i class="fas fa-bars text-2xl"></i>
+        </button>
+    </header>
+
+    <div id="sidebar-overlay" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[40] hidden opacity-0 transition-opacity duration-300"></div>
+
     <div class="flex">
-        <aside class="w-64 bg-[#0F172A] border-r border-white/5 text-white min-h-screen fixed left-0 top-0 overflow-y-auto z-50">
-            <div class="p-8 border-b border-white/5">
-                <a href="{% url 'admin_dashboard' %}" class="text-xl font-black tracking-tighter flex items-center gap-3 italic">
-                    <span class="p-2 bg-[#00ff99]/10 rounded-lg">
-                        <i class="fas fa-shield-halved text-[#00ff99]"></i>
+        <aside id="sidebar" class="sidebar-closed w-72 lg:w-64 bg-[#0F172A] border-r border-white/5 text-white h-screen fixed left-0 top-0 flex flex-col z-[50]">
+            
+            <div class="hidden lg:flex p-8 border-b border-white/5">
+                <a href="{% url 'admin_dashboard' %}" class="flex items-center gap-3 italic">
+                    <span class="p-2 bg-[#00ff99]/10 rounded-lg shrink-0">
+                        <i class="fas fa-shield-halved text-[#00ff99] text-xl"></i>
                     </span>
-                    ADMIN<span class="text-[#00ff99]">.</span>
+                    <span class="text-xl font-black tracking-tighter uppercase">
+                        ADMIN<span class="text-[#00ff99]">.</span>
+                    </span>
                 </a>
             </div>
             
-            <nav class="mt-5 pb-20 px-4">
+            <nav class="pt-20 lg:pt-5 flex-1 overflow-y-auto no-scrollbar px-4 pb-10">
                 <p class="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em] mb-4 px-4">General</p>
                 
                 <a href="{% url 'admin_dashboard' %}" class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 {% if request.resolver_match.url_name == 'admin_dashboard' %}bg-[#00ff99] text-black font-bold shadow-[0_0_20px_rgba(0,255,153,0.3)]{% else %}text-slate-400 hover:bg-white/5 hover:text-white{% endif %}">
@@ -29,31 +67,26 @@
                 
                 <div class="mt-8">
                     <p class="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em] mb-4 px-4">Management</p>
-                    
                     <a href="{% url 'manage_topics' %}" class="flex items-center gap-3 px-4 py-3 rounded-xl mb-1 transition-all {% if 'topic' in request.path %}bg-white/10 text-white font-bold border border-white/10{% else %}text-slate-400 hover:bg-white/5 hover:text-white{% endif %}">
                         <i class="fas fa-folder text-sm"></i>
                         Topics
                     </a>
-                    
                     <a href="{% url 'manage_questions' %}" class="flex items-center gap-3 px-4 py-3 rounded-xl mb-1 transition-all {% if 'question' in request.path %}bg-white/10 text-white font-bold border border-white/10{% else %}text-slate-400 hover:bg-white/5 hover:text-white{% endif %}">
                         <i class="fas fa-question-circle text-sm"></i>
                         Questions
                     </a>
-                    
                     <a href="{% url 'manage_users' %}" class="flex items-center gap-3 px-4 py-3 rounded-xl mb-1 transition-all {% if 'user' in request.path %}bg-white/10 text-white font-bold border border-white/10{% else %}text-slate-400 hover:bg-white/5 hover:text-white{% endif %}">
                         <i class="fas fa-users text-sm"></i>
                         Users
                     </a>
                 </div>
 
-                <div class="mt-5">
+                <div class="mt-8">
                     <p class="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em] mb-4 px-4">Activity</p>
-                    
                     <a href="{% url 'manage_bookmarks' %}" class="flex items-center gap-3 px-4 py-3 rounded-xl mb-1 transition-all {% if 'bookmark' in request.path %}bg-white/10 text-white font-bold border border-white/10{% else %}text-slate-400 hover:bg-white/5 hover:text-white{% endif %}">
                         <i class="fas fa-bookmark text-sm"></i>
                         Bookmarks
                     </a>
-                    
                     <a href="{% url 'manage_completions' %}" class="flex items-center gap-3 px-4 py-3 rounded-xl mb-1 transition-all {% if 'completion' in request.path %}bg-white/10 text-white font-bold border border-white/10{% else %}text-slate-400 hover:bg-white/5 hover:text-white{% endif %}">
                         <i class="fas fa-check-circle text-sm"></i>
                         Completions
@@ -74,13 +107,13 @@
             </nav>
         </aside>
         
-        <main class="ml-64 flex-1 p-10">
-            <div class="flex justify-between items-center mb-12">
+        <main class="ml-0 lg:ml-64 flex-1 p-6 lg:p-10 mt-16 lg:mt-0 transition-all duration-300">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-12 gap-6">
                 <div>
-                    <h1 class="text-3xl font-black text-white tracking-tight italic">
+                    <h1 class="text-2xl lg:text-3xl font-black text-white tracking-tight italic">
                         {% block page_title %}Dashboard{% endblock %}
                     </h1>
-                    <p class="text-slate-500 text-sm font-medium mt-1">{% block page_subtitle %}System Overview & Telemetry{% endblock %}</p>
+                    <p class="text-slate-500 text-xs lg:text-sm font-medium mt-1">{% block page_subtitle %}System Overview & Telemetry{% endblock %}</p>
                 </div>
 
                 <div class="flex items-center gap-4 bg-white/5 p-2 pr-6 rounded-2xl border border-white/5">
@@ -89,11 +122,9 @@
                     </div>
                     <div>
                         <p class="text-xs font-black text-white leading-none">{{ request.user.username }}</p>
-                        {% if request.user.is_superuser %}
-                            <p class="text-[9px] font-black text-[#00ff99] uppercase tracking-widest mt-1">Super Admin</p>
-                        {% else %}
-                            <p class="text-[9px] font-black text-blue-400 uppercase tracking-widest mt-1">System Admin</p>
-                        {% endif %}
+                        <p class="text-[9px] font-black text-[#00ff99] uppercase tracking-widest mt-1">
+                            {% if request.user.is_superuser %}Super Admin{% else %}System Admin{% endif %}
+                        </p>
                     </div>
                 </div>
             </div>
@@ -115,5 +146,40 @@
             </div>
         </main>
     </div>
+
+    <script>
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('sidebar-overlay');
+        const toggleBtn = document.getElementById('mobile-toggle');
+
+        function toggleSidebar() {
+            const isClosed = sidebar.classList.contains('sidebar-closed');
+            
+            if (isClosed) {
+                sidebar.classList.remove('sidebar-closed');
+                overlay.classList.remove('hidden');
+                setTimeout(() => overlay.classList.add('opacity-100'), 10);
+                document.body.style.overflow = 'hidden'; // Stop scrolling
+            } else {
+                sidebar.classList.add('sidebar-closed');
+                overlay.classList.remove('opacity-100');
+                setTimeout(() => overlay.classList.add('hidden'), 300);
+                document.body.style.overflow = ''; // Allow scrolling
+            }
+        }
+
+        toggleBtn.addEventListener('click', toggleSidebar);
+        overlay.addEventListener('click', toggleSidebar);
+
+        // Ensure sidebar is closed when resizing back to desktop
+        window.addEventListener('resize', () => {
+            if (window.innerWidth >= 1024) {
+                sidebar.classList.add('sidebar-closed');
+                overlay.classList.add('hidden');
+                overlay.classList.remove('opacity-100');
+                document.body.style.overflow = '';
+            }
+        });
+    </script>
 </body>
 </html>

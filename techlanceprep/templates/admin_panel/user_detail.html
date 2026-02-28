@@ -6,54 +6,56 @@
 {% block page_subtitle %}In-depth activity telemetry for entity: {{ view_user.username }}{% endblock %}
 
 {% block content %}
-<a href="{% url 'manage_users' %}" class="inline-flex items-center text-slate-500 hover:text-[#00ff99] mb-8 group transition-colors text-[10px] font-black uppercase tracking-widest">
+<a href="{% url 'manage_users' %}" class="inline-flex items-center text-slate-500 hover:text-[#00ff99] mb-6 md:mb-8 group transition-colors text-[10px] font-black uppercase tracking-widest">
     <i class="fas fa-chevron-left mr-2 group-hover:-translate-x-1 transition-transform"></i> Return to Directory
 </a>
 
-<div class="bg-white/[0.02] border border-white/5 rounded-[2.5rem] p-8 mb-10 backdrop-blur-md shadow-2xl relative overflow-hidden">
+<div class="bg-white/[0.02] border border-white/5 rounded-[1.5rem] md:rounded-[2.5rem] p-6 md:p-8 mb-8 md:mb-10 backdrop-blur-md shadow-2xl relative overflow-hidden">
     <div class="absolute -top-24 -right-24 w-64 h-64 bg-blue-500/5 rounded-full blur-[100px] pointer-events-none"></div>
 
-    <div class="flex flex-col md:flex-row items-center gap-8 relative z-10">
-        <div class="w-24 h-24 bg-gradient-to-br from-[#00ff99]/20 to-blue-600/20 rounded-3xl flex items-center justify-center text-[#00ff99] text-4xl font-black border border-white/10 shadow-[inset_0_0_20px_rgba(0,255,153,0.1)]">
+    <div class="flex flex-col md:flex-row items-center md:items-start lg:items-center gap-6 md:gap-8 relative z-10">
+        <div class="w-20 h-20 md:w-24 md:h-24 shrink-0 bg-gradient-to-br from-[#00ff99]/20 to-blue-600/20 rounded-2xl md:rounded-3xl flex items-center justify-center text-[#00ff99] text-3xl md:text-4xl font-black border border-white/10 shadow-[inset_0_0_20px_rgba(0,255,153,0.1)]">
             {{ view_user.username|upper|slice:":1" }}
         </div>
         
         <div class="flex-1 text-center md:text-left">
-            <h2 class="text-3xl font-black text-white tracking-tighter">{{ view_user.username }}</h2>
-            <p class="text-slate-400 font-medium">{{ view_user.email }}</p>
-            <div class="flex flex-wrap justify-center md:justify-start gap-4 mt-4">
+            <h2 class="text-2xl md:text-3xl font-black text-white tracking-tighter">{{ view_user.username }}</h2>
+            <p class="text-slate-400 font-medium text-sm md:text-base break-all">{{ view_user.email }}</p>
+            
+            <div class="flex flex-wrap justify-center md:justify-start gap-x-6 gap-y-3 mt-4">
                 <p class="text-slate-500 text-[10px] font-black uppercase tracking-widest flex items-center gap-2">
                     <i class="fas fa-id-card text-[#00ff99]"></i>
-                    Member since {{ view_user.date_joined|date:"M d, Y" }}
+                    Joined {{ view_user.date_joined|date:"M d, Y" }}
                 </p>
                 <p class="text-slate-500 text-[10px] font-black uppercase tracking-widest flex items-center gap-2">
                     <i class="fas fa-microchip text-blue-500"></i>
-                    Status: Verified Entity
+                    Status: Verified
                 </p>
             </div>
         </div>
 
-        <div class="shrink-0">
+        <div class="shrink-0 w-full md:w-auto mt-2 md:mt-0">
             {% if view_user.is_superuser %}
-                <span class="bg-amber-500/10 text-amber-400 border border-amber-500/20 px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] shadow-[0_0_20px_rgba(245,158,11,0.1)]">
+                <div class="bg-amber-500/10 text-amber-400 border border-amber-500/20 px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] shadow-[0_0_20px_rgba(245,158,11,0.1)] text-center">
                     Superuser_Root
-                </span>
+                </div>
             {% elif view_user.is_admin %}
-                <span class="bg-blue-500/10 text-blue-400 border border-blue-500/20 px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-[0.2em]">
+                <div class="bg-blue-500/10 text-blue-400 border border-blue-500/20 px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] text-center">
                     Admin_Access
-                </span>
+                </div>
             {% else %}
-                <span class="bg-white/5 text-slate-500 border border-white/10 px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-[0.2em]">
+                <div class="bg-white/5 text-slate-500 border border-white/10 px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] text-center">
                     Standard_Node
-                </span>
+                </div>
             {% endif %}
         </div>
     </div>
 </div>
 
-<div class="grid lg:grid-cols-2 gap-8">
-    <div class="bg-white/[0.02] border border-white/5 rounded-[2.5rem] p-8 backdrop-blur-sm">
-        <h3 class="text-xs font-black text-white uppercase tracking-[0.3em] mb-8 flex items-center gap-3">
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
+    
+    <div class="bg-white/[0.02] border border-white/5 rounded-[1.5rem] md:rounded-[2.5rem] p-6 md:p-8 backdrop-blur-sm">
+        <h3 class="text-xs font-black text-white uppercase tracking-[0.3em] mb-6 md:mb-8 flex items-center gap-3">
             <span class="w-1.5 h-1.5 bg-amber-500 rounded-full animate-pulse"></span>
             Saved Resources ({{ bookmarks.count }})
         </h3>
@@ -61,9 +63,9 @@
         {% if bookmarks %}
             <div class="space-y-4">
                 {% for bookmark in bookmarks %}
-                <div class="group p-5 bg-white/[0.02] border border-white/5 rounded-2xl hover:border-amber-500/30 transition-all">
-                    <p class="font-bold text-slate-200 group-hover:text-white transition-colors">{{ bookmark.question.title }}</p>
-                    <div class="flex items-center justify-between mt-3">
+                <div class="group p-4 md:p-5 bg-white/[0.02] border border-white/5 rounded-2xl hover:border-amber-500/30 transition-all">
+                    <p class="font-bold text-slate-200 group-hover:text-white transition-colors text-sm md:text-base">{{ bookmark.question.title }}</p>
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between mt-3 gap-2">
                         <span class="text-[10px] font-black uppercase tracking-widest text-slate-500">
                             {{ bookmark.question.topic.icon }} {{ bookmark.question.topic.name }}
                         </span>
@@ -82,8 +84,8 @@
         {% endif %}
     </div>
     
-    <div class="bg-white/[0.02] border border-white/5 rounded-[2.5rem] p-8 backdrop-blur-sm">
-        <h3 class="text-xs font-black text-white uppercase tracking-[0.3em] mb-8 flex items-center gap-3">
+    <div class="bg-white/[0.02] border border-white/5 rounded-[1.5rem] md:rounded-[2.5rem] p-6 md:p-8 backdrop-blur-sm">
+        <h3 class="text-xs font-black text-white uppercase tracking-[0.3em] mb-6 md:mb-8 flex items-center gap-3">
             <span class="w-1.5 h-1.5 bg-[#00ff99] rounded-full animate-pulse"></span>
             Operation History ({{ completions.count }})
         </h3>
@@ -91,9 +93,9 @@
         {% if completions %}
             <div class="space-y-4">
                 {% for completion in completions %}
-                <div class="group p-5 bg-white/[0.02] border border-white/5 rounded-2xl hover:border-[#00ff99]/30 transition-all">
-                    <p class="font-bold text-slate-200 group-hover:text-white transition-colors">{{ completion.question.title }}</p>
-                    <div class="flex items-center justify-between mt-3">
+                <div class="group p-4 md:p-5 bg-white/[0.02] border border-white/5 rounded-2xl hover:border-[#00ff99]/30 transition-all">
+                    <p class="font-bold text-slate-200 group-hover:text-white transition-colors text-sm md:text-base">{{ completion.question.title }}</p>
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between mt-3 gap-2">
                         <span class="text-[10px] font-black uppercase tracking-widest text-slate-500">
                             {{ completion.question.topic.icon }} {{ completion.question.topic.name }}
                         </span>

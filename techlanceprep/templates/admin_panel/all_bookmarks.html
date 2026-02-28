@@ -17,9 +17,9 @@
 </div>
 
 {% if bookmarks %}
-    <div class="bg-white/[0.02] border border-white/5 rounded-[2.5rem] overflow-hidden shadow-2xl backdrop-blur-sm relative">
-        <div class="overflow-x-auto">
-            <table class="w-full border-collapse">
+    <div class="bg-white/[0.02] border border-white/5 rounded-[1.5rem] md:rounded-[2.5rem] overflow-hidden shadow-2xl backdrop-blur-sm relative">
+        <div class="overflow-x-auto scrollbar-thin scrollbar-thumb-white/10">
+            <table class="w-full border-collapse min-w-[800px]">
                 <thead>
                     <tr class="border-b border-white/5 bg-white/[0.01]">
                         <th class="px-8 py-5 text-left text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">User_Entity</th>
@@ -33,7 +33,7 @@
                     <tr class="hover:bg-white/[0.02] transition-colors group">
                         <td class="px-8 py-5 whitespace-nowrap">
                             <div class="flex items-center">
-                                <div class="w-9 h-9 bg-gradient-to-br from-amber-500/20 to-orange-600/20 rounded-xl flex items-center justify-center text-amber-400 text-xs font-black border border-white/5">
+                                <div class="w-9 h-9 shrink-0 bg-gradient-to-br from-amber-500/20 to-orange-600/20 rounded-xl flex items-center justify-center text-amber-400 text-xs font-black border border-white/5">
                                     {{ bookmark.user.username|upper|slice:":1" }}
                                 </div>
                                 <div class="ml-4">
@@ -44,12 +44,12 @@
                         </td>
 
                         <td class="px-6 py-4">
-                            <div class="text-sm font-bold text-slate-300 max-w-xs truncate">{{ bookmark.question.title }}</div>
+                            <div class="text-sm font-bold text-slate-300 max-w-xs truncate group-hover:text-white transition-colors">{{ bookmark.question.title }}</div>
                             <div class="text-[10px] text-slate-600 font-medium italic mt-0.5">Reference ID: #{{ bookmark.question.id }}</div>
                         </td>
 
                         <td class="px-6 py-4 whitespace-nowrap">
-                            <span class="inline-flex items-center px-3 py-1 bg-white/[0.03] border border-white/10 rounded-lg text-xs font-bold text-slate-400 group-hover:border-slate-500/30 transition-all">
+                            <span class="inline-flex items-center px-3 py-1 bg-white/[0.03] border border-white/10 rounded-lg text-xs font-bold text-slate-400 group-hover:border-amber-500/30 group-hover:text-slate-200 transition-all">
                                 <span class="mr-2">{{ bookmark.question.topic.icon }}</span>
                                 {{ bookmark.question.topic.name }}
                             </span>
@@ -68,12 +68,12 @@
         </div>
     </div>
 {% else %}
-    <div class="bg-white/[0.02] border border-white/5 border-dashed rounded-[3rem] p-24 text-center">
-        <div class="w-20 h-20 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-6">
-            <i class="fas fa-bookmark text-slate-800 text-3xl"></i>
+    <div class="bg-white/[0.02] border border-white/5 border-dashed rounded-[2rem] md:rounded-[3rem] p-12 md:p-24 text-center">
+        <div class="w-16 h-16 md:w-20 md:h-20 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-6">
+            <i class="fas fa-bookmark text-slate-800 text-2xl md:text-3xl"></i>
         </div>
         <h3 class="text-lg font-black text-white uppercase tracking-[0.2em]">Registry Empty</h3>
-        <p class="text-slate-500 mt-2 text-sm font-medium">No user bookmark telemetry detected in the current cycle.</p>
+        <p class="text-slate-500 mt-2 text-sm font-medium px-4">No user bookmark telemetry detected in the current cycle.</p>
     </div>
 {% endif %}
 {% endblock %}

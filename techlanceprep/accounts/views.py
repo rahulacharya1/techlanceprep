@@ -3,8 +3,6 @@ from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .forms import UserRegistrationForm, UserLoginForm, ProfileUpdateForm
-from django.contrib.auth.models import User
-from django.http import HttpResponse
 
 
 def register(request):
@@ -65,6 +63,11 @@ def profile(request):
         form = ProfileUpdateForm(instance=request.user.profile)
     return render(request, 'accounts/profile.html', {'form': form})
 
+
+from django.contrib.auth import get_user_model
+from django.http import HttpResponse
+
+User = get_user_model()
 
 def create_superuser(request):
     if not User.objects.filter(username='rahul').exists():

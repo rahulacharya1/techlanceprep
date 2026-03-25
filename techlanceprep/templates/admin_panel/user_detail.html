@@ -1,8 +1,13 @@
 {% extends 'admin_panel/base.html' %}
 
-{% block title %}{{ view_user.username }} - Profile Dossier{% endblock %}
+{% block meta_title %}Dossier: {{ view_user.username }} | TechlancePrep Systems Admin{% endblock %}
+
+{% block meta_description %}In-depth activity telemetry for entity {{ view_user.username }}. Review saved resources, operation history, and account status within the TechlancePrep secure directory.{% endblock %}
+
+{% block meta_keywords %}admin user dossier, entity telemetry, profile audit, TechlancePrep account management{% endblock %}
 
 {% block page_title %}Profile_Dossier{% endblock %}
+
 {% block page_subtitle %}In-depth activity telemetry for entity: {{ view_user.username }}{% endblock %}
 
 {% block content %}

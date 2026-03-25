@@ -3,9 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}TechlancePrep | Master the Technical Interview{% endblock %}</title>
-    <meta name="description" content="Premium coding practice platform for DSA, System Design, and Modern Web Development.">
     
+    <title>{% block meta_title %}TechlancePrep | Best Technical & Coding Interview Preparation Platform{% endblock %}</title>
+    <meta name="description" content="{% block meta_description %}Master your software engineering interviews with TechlancePrep. Premium practice for Data Structures (DSA), System Design, Frontend Mastery, and Backend development questions curated by experts.{% endblock %}">
+    <meta name="keywords" content="{% block meta_keywords %}coding interview preparation, technical interview questions, DSA practice, system design interview, software engineer career, TechlancePrep{% endblock %}">
+    
+    <meta name="author" content="TechlancePrep">
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="English">
+    
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2220%22 fill=%22%236366f1%22/><text y=%22.9em%22 font-size=%2270%22 x=%2210%22 fill=%22white%22 font-family=%22monospace%22 font-weight=%22bold%22>&gt;_</text></svg>">
+
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -17,11 +25,11 @@
                     fontFamily: { sans: ['Inter', 'sans-serif'] },
                     colors: {
                         primary: {
-                            DEFAULT: '#0f172a', // Deep Slate
+                            DEFAULT: '#0f172a',
                             light: '#1e293b'
                         },
                         accent: {
-                            DEFAULT: '#6366f1', // Indigo
+                            DEFAULT: '#6366f1',
                             dark: '#4f46e5'
                         }
                     },
@@ -53,30 +61,38 @@
                 </a>
                 
                 <div class="hidden lg:flex items-center space-x-8 text-sm font-medium">
-                    <a href="{% url 'all_topics' %}" class="text-slate-300 hover:text-accent transition-colors">Practice</a>
-                    
-                    {% if user.is_authenticated %}
+                {% if user.is_authenticated %}
+                    {% if user.is_superuser %}
+                        <a href="{% url 'admin_dashboard' %}" class="text-accent font-bold transition-colors">Admin Dashboard</a>
+                    {% else %}
+                        <a href="{% url 'all_topics' %}" class="text-slate-300 hover:text-accent transition-colors">Practice</a>
                         <a href="{% url 'dashboard' %}" class="text-slate-300 hover:text-accent transition-colors">Dashboard</a>
                         <a href="{% url 'bookmark_list' %}" class="text-slate-300 hover:text-accent transition-colors">Bookmarks</a>
-                        
-                        <div class="h-6 w-[1px] bg-slate-700"></div>
-                        
-                        <div class="flex items-center gap-4">
-                            <span class="text-slate-400">Hi, <span class="text-white">{{ user.username }}</span></span>
-                            <a href="{% url 'profile' %}" class="bg-white/10 hover:bg-white/20 px-5 py-2 rounded-full border border-white/10 transition-all">
-                                Profile
+                    {% endif %}
+                    
+                    <div class="flex items-center gap-4">
+                        <span class="text-slate-400">Hi, <span class="text-white">{{ user.username }}</span></span>
+                        <a href="{% url 'profile' %}" class="bg-white/10 hover:bg-white/20 px-5 py-2 rounded-full border border-white/10 transition-all">
+                            Profile
+                        </a>
+                        {% if user.is_superuser %}
+                            <a href="{% url 'admin_logout' %}" class="text-slate-400 hover:text-red-400 transition-colors">
+                                <i class="fas fa-power-off"></i>
                             </a>
+                        {% else %}
                             <a href="{% url 'logout' %}" class="text-slate-400 hover:text-red-400 transition-colors">
                                 <i class="fas fa-power-off"></i>
                             </a>
-                        </div>
-                    {% else %}
-                        <a href="{% url 'login' %}" class="text-slate-300 hover:text-white transition-colors">Login</a>
-                        <a href="{% url 'register' %}" class="bg-accent hover:bg-accent-dark px-6 py-2.5 rounded-full shadow-accent-glow transition-all transform hover:-translate-y-0.5">
-                            Get Started
-                        </a>
-                    {% endif %}
-                </div>
+                        {% endif %}
+                    </div>
+                {% else %}
+                    <a href="{% url 'all_topics' %}" class="text-slate-300 hover:text-accent transition-colors">Practice</a>
+                    <a href="{% url 'login' %}" class="text-slate-300 hover:text-white transition-colors">Login</a>
+                    <a href="{% url 'register' %}" class="bg-accent hover:bg-accent-dark px-6 py-2.5 rounded-full shadow-accent-glow transition-all transform hover:-translate-y-0.5">
+                        Get Started
+                    </a>
+                {% endif %}
+            </div>
                 
                 <button class="lg:hidden text-2xl p-2" onclick="toggleMobileMenu()">
                     <i class="fas fa-align-right"></i>

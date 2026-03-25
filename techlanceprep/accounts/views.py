@@ -63,19 +63,3 @@ def profile(request):
         form = ProfileUpdateForm(instance=request.user.profile)
     return render(request, 'accounts/profile.html', {'form': form})
 
-
-from django.contrib.auth import get_user_model
-from django.http import HttpResponse
-
-User = get_user_model()
-
-def create_superuser(request):
-    if not User.objects.filter(username='rahul').exists():
-        User.objects.create_superuser(
-            username='rahul',
-            email='rahul@gmail.com',
-            password='Rahul@1234'
-        )
-        return HttpResponse("Superuser created")
-    return HttpResponse("Already exists")
-

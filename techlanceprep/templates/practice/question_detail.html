@@ -1,6 +1,10 @@
 {% extends 'base.html' %}
 
-{% block title %}{{ question.title }} - TechlancePrep{% endblock %}
+{% block meta_title %}Solve {{ question.title }} | {{ question.topic.name }} Interview Challenge{% endblock %}
+
+{% block meta_description %}Master the {{ question.title }} challenge on TechlancePrep. Practice this {{ question.difficulty }} level {{ question.question_type }} question with detailed problem statements, optimal code solutions, and progress tracking.{% endblock %}
+
+{% block meta_keywords %}{{ question.title }} solution, {{ question.topic.name }} interview questions, {{ question.question_type }} practice, coding interview prep, TechlancePrep {{ question.slug }}{% endblock %}
 
 {% block content %}
 <div class="min-h-screen bg-[#0B0F1A] pb-24 relative overflow-hidden">

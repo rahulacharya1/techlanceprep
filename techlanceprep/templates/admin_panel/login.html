@@ -3,13 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Terminal Access - TechlancePrep</title>
+    
+    <title>Terminal Access | TechlancePrep Secure Gateway</title>
+    <meta name="description" content="Secure administrative login for TechlancePrep system telemetry and core management.">
+    <meta name="robots" content="noindex, nofollow, noarchive">
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2220%22 fill=%22%2300ff99%22/><text y=%22.9em%22 font-size=%2270%22 x=%2210%22 fill=%22black%22 font-family=%22monospace%22 font-weight=%22bold%22>&gt;_</text></svg>">
+
     <style>
-        body { background-color: #0B0F1A; }
+        /* Base Background */
+        body { 
+            background-color: #0B0F1A; 
+        }
+
+        /* Institutional Focus: Non-italic utility */
+        .tracking-ultra { 
+            letter-spacing: 0.3em; 
+        }
+
+        /* Interactive Glow Effect */
         .glow-input:focus {
             box-shadow: 0 0 15px rgba(0, 255, 153, 0.2);
+            border-color: rgba(0, 255, 153, 0.5) !important;
+        }
+
+        /* Smooth Transition for UI interactions */
+        input, button {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Tailored scrollbar for dark mode aesthetic */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0B0F1A;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(0, 255, 153, 0.3);
         }
     </style>
 </head>

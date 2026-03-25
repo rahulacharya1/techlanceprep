@@ -42,7 +42,7 @@ def admin_login(request):
     return render(request, 'admin_panel/login.html')
 
 
-@login_required
+@login_required(login_url='admin_login')
 @user_passes_test(is_admin)
 def admin_dashboard(request):
     """Main admin dashboard"""
@@ -95,7 +95,7 @@ def admin_dashboard(request):
 
 # ==================== TOPIC MANAGEMENT ====================
 
-@login_required
+@login_required(login_url='admin_login')
 @user_passes_test(is_admin)
 def manage_topics(request):
     """Manage all topics"""
@@ -103,7 +103,7 @@ def manage_topics(request):
     return render(request, 'admin_panel/topics.html', {'topics': topics})
 
 
-@login_required
+@login_required(login_url='admin_login')
 @user_passes_test(is_admin)
 def add_topic(request):
     """Add new topic"""
@@ -123,7 +123,7 @@ def add_topic(request):
     return render(request, 'admin_panel/topic_form.html', {'topic': None, 'action': 'Add'})
 
 
-@login_required
+@login_required(login_url='admin_login')
 @user_passes_test(is_admin)
 def edit_topic(request, topic_id):
     """Edit existing topic"""
@@ -141,7 +141,7 @@ def edit_topic(request, topic_id):
     return render(request, 'admin_panel/topic_form.html', {'topic': topic, 'action': 'Edit'})
 
 
-@login_required
+@login_required(login_url='admin_login')
 @user_passes_test(is_admin)
 def delete_topic(request, topic_id):
     """Delete a topic"""
@@ -160,7 +160,7 @@ def delete_topic(request, topic_id):
 
 # ==================== QUESTION MANAGEMENT ====================
 
-@login_required
+@login_required(login_url='admin_login')
 @user_passes_test(is_admin)
 def manage_questions(request):
     """Manage all questions"""
@@ -189,7 +189,7 @@ def manage_questions(request):
     })
 
 
-@login_required
+@login_required(login_url='admin_login')
 @user_passes_test(is_admin)
 def add_question(request):
     """Add new question"""
@@ -219,7 +219,7 @@ def add_question(request):
     return render(request, 'admin_panel/question_form.html', {'question': None, 'topics': topics, 'action': 'Add'})
 
 
-@login_required
+@login_required(login_url='admin_login')
 @user_passes_test(is_admin)
 def edit_question(request, question_id):
     """Edit existing question"""
@@ -244,7 +244,7 @@ def edit_question(request, question_id):
     })
 
 
-@login_required
+@login_required(login_url='admin_login')
 @user_passes_test(is_admin)
 def delete_question(request, question_id):
     """Delete a question"""
@@ -257,7 +257,7 @@ def delete_question(request, question_id):
 
 # ==================== USER MANAGEMENT ====================
 
-@login_required
+@login_required(login_url='admin_login')
 @user_passes_test(is_admin)
 def manage_users(request):
     """Manage all users"""
@@ -274,7 +274,7 @@ def manage_users(request):
     return render(request, 'admin_panel/users.html', {'users': users})
 
 
-@login_required
+@login_required(login_url='admin_login')
 @user_passes_test(is_admin)
 def view_user(request, user_id):
     """View user details with their bookmarks and completions"""
@@ -289,7 +289,7 @@ def view_user(request, user_id):
     })
 
 
-@login_required
+@login_required(login_url='admin_login')
 @user_passes_test(is_admin)
 def toggle_user_admin(request, user_id):
     """Toggle admin status of a user"""
@@ -309,7 +309,7 @@ def toggle_user_admin(request, user_id):
     return redirect('manage_users')
 
 
-@login_required
+@login_required(login_url='admin_login')
 @user_passes_test(is_admin)
 def delete_user(request, user_id):
     """Delete a user"""
@@ -330,7 +330,7 @@ def delete_user(request, user_id):
 
 # ==================== BOOKMARKS & COMPLETIONS ====================
 
-@login_required
+@login_required(login_url='admin_login')
 @user_passes_test(is_admin)
 def manage_bookmarks(request):
     """View all bookmarks"""
@@ -344,7 +344,7 @@ def manage_bookmarks(request):
     return render(request, 'admin_panel/all_bookmarks.html', {'bookmarks': bookmarks})
 
 
-@login_required
+@login_required(login_url='admin_login')
 @user_passes_test(is_admin)
 def manage_completions(request):
     """View all completions"""
@@ -358,7 +358,7 @@ def manage_completions(request):
     return render(request, 'admin_panel/all_completions.html', {'completions': completions})
 
 
-@login_required
+@login_required(login_url='admin_login')
 @user_passes_test(is_admin)
 def admin_logout(request):
     """Admin logout"""

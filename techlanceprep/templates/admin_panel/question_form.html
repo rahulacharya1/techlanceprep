@@ -1,8 +1,17 @@
 {% extends 'admin_panel/base.html' %}
 
-{% block title %}{{ action }} Question - Admin Panel{% endblock %}
+{% block meta_title %}
+    {% if question %}Modify Registry: {{ question.title }}{% else %}Deploy New Record{% endif %} | TechlancePrep Admin
+{% endblock %}
+
+{% block meta_description %}
+    Access the TechlancePrep question repository core to add or update technical challenges, coding logic, and behavioral interview modules.
+{% endblock %}
+
+{% block meta_keywords %}question management, admin data entry, technical curriculum update, coding challenge deployment{% endblock %}
 
 {% block page_title %}Data Entry{% endblock %}
+
 {% block page_subtitle %}Updating question repository core{% endblock %}
 
 {% block content %}

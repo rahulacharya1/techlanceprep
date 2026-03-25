@@ -1,8 +1,17 @@
 {% extends 'admin_panel/base.html' %}
 
-{% block title %}{{ action }} Topic - Admin Panel{% endblock %}
+{% block meta_title %}
+    {% if topic %}Sync Parameters: {{ topic.name }}{% else %}Initialize New Module{% endif %} | TechlancePrep Admin
+{% endblock %}
+
+{% block meta_description %}
+    Configure the core technical modules for the TechlancePrep ecosystem. Define module labels, visual symbols, and telemetry descriptions to expand the curriculum database.
+{% endblock %}
+
+{% block meta_keywords %}system init, curriculum management, techlanceprep admin, module registration, technical database core{% endblock %}
 
 {% block page_title %}SYSTEM_INIT{% endblock %}
+
 {% block page_subtitle %}Registering new module to core database{% endblock %}
 
 {% block content %}

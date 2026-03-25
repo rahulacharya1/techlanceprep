@@ -3,18 +3,72 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>404 - Page Not Found</title>
+    
+    <title>Error 404 | Node Not Found - TechlancePrep</title>
+    <meta name="description" content="The requested system node could not be located. Connection lost within the TechlancePrep directory.">
+    <meta name="robots" content="noindex, follow">
+
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body { background-color: #0B0F1A; }
+        
+        .glitch-text {
+            text-shadow: 0 0 20px rgba(0, 255, 153, 0.3);
+        }
+
+        /* Institutional Focus: Non-italic utility */
+        .tracking-institutional { 
+            letter-spacing: 0.4em; 
+        }
+
+        /* Subtle Background Animation */
+        @keyframes pulse-slow {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(1.05); }
+        }
+        .animate-pulse-slow {
+            animation: pulse-slow 8s infinite ease-in-out;
+        }
+    </style>
 </head>
-<body class="bg-gray-100 min-h-screen flex items-center justify-center">
-    <div class="text-center">
-        <div class="text-8xl mb-4">😕</div>
-        <h1 class="text-4xl font-bold text-gray-800 mb-2">404</h1>
-        <h2 class="text-xl text-gray-600 mb-4">Page Not Found</h2>
-        <p class="text-gray-500 mb-6">The page you're looking for doesn't exist or has been moved.</p>
-        <a href="/" class="bg-primary text-white px-6 py-3 rounded-lg hover:bg-blue-800 transition">
-            Go Home
-        </a>
+
+<body class="min-h-screen flex items-center justify-center p-6 text-slate-400 overflow-hidden">
+    
+    <div class="fixed top-[-10%] left-[-10%] w-[50%] h-[50%] bg-[#00ff99]/5 rounded-full blur-[120px] pointer-events-none animate-pulse-slow"></div>
+    <div class="fixed bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-blue-500/5 rounded-full blur-[120px] pointer-events-none animate-pulse-slow" style="animation-delay: -4s;"></div>
+
+    <div class="relative z-10 text-center max-w-lg">
+        <div class="inline-flex items-center justify-center w-24 h-24 rounded-[2.5rem] bg-white/[0.03] border border-white/10 mb-10 shadow-2xl relative group">
+            <div class="absolute inset-0 bg-[#00ff99]/10 rounded-[2.5rem] blur-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+            <i class="fas fa-microchip text-[#00ff99] text-4xl relative z-10"></i>
+        </div>
+
+        <h4 class="text-accent font-black uppercase tracking-institutional text-[10px] mb-4">Error_Protocol: 404</h4>
+        <h1 class="text-6xl md:text-8xl font-black text-white tracking-tighter mb-6 glitch-text">
+            LOST <span class="text-accent">NODE.</span>
+        </h1>
+        
+        <p class="text-lg md:text-xl text-slate-500 mb-12 leading-relaxed font-medium">
+            The requested directory path does not exist within the current repository. Connection to the specified asset has been severed.
+        </p>
+
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <a href="/" class="w-full sm:w-auto px-10 py-4 bg-accent hover:bg-accent-dark text-black font-black uppercase tracking-widest text-xs rounded-2xl shadow-accent-glow transition-all transform hover:-translate-y-1 active:scale-95 flex items-center justify-center gap-2">
+                <i class="fas fa-house"></i>
+                Return to Base
+            </a>
+            <a href="javascript:history.back()" class="w-full sm:w-auto px-10 py-4 bg-white/5 border border-white/10 hover:bg-white/10 text-white font-black uppercase tracking-widest text-xs rounded-2xl transition-all flex items-center justify-center gap-2">
+                <i class="fas fa-arrow-left"></i>
+                Previous State
+            </a>
+        </div>
+
+        <p class="mt-16 text-[9px] font-black text-slate-700 uppercase tracking-[0.4em]">
+            Techlance Security Infrastructure • All Sessions Logged
+        </p>
     </div>
+
 </body>
 </html>

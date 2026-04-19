@@ -12,8 +12,17 @@ SECRET_KEY = os.environ.get("SECRET_KEY")
 
 DEBUG = os.environ.get("DEBUG", "False") == "True"
 
-ALLOWED_HOSTS = [host.strip() for host in os.environ.get("ALLOWED_HOSTS", "").split(",") if host]
+ALLOWED_HOSTS = [
+    "127.0.0.1",
+    "localhost",
+    "techlanceprep.in",
+    "www.techlanceprep.in",
+]
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://techlanceprep.in",
+    "https://www.techlanceprep.in"
+]
 
 # Application definition
 
